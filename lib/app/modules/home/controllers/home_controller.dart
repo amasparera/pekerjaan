@@ -20,6 +20,11 @@ class HomeController extends GetxController {
     }
   }
 
+  void batal() {
+    Get.back();
+    text.clear();
+  }
+
   void hapus(id) {
     FirebaseFirestroreku().hapus(id);
   }

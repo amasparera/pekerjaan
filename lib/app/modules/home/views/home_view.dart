@@ -55,7 +55,11 @@ class _HomeViewState extends State<HomeView> {
                           'C7XIMtmbTsryGe4Ignqf', pekerjaan[index].name!));
                 },
                 onTap: () => controller.toPekerjaan(index),
-                title: Text(pekerjaan[index].name!),
+                title: Text(
+                  pekerjaan[index].name!,
+                  style: const TextStyle(fontSize: 20),
+                ),
+                leading: Icon(Icons.work),
               );
             },
           );
@@ -109,7 +113,9 @@ class _HomeViewState extends State<HomeView> {
                       padding: const EdgeInsets.all(10),
                       color: Colors.red,
                       child: InkWell(
-                          onTap: () => Get.back(),
+                          onTap: () {
+                            controller.batal();
+                          },
                           child: const Center(
                               child: Text(
                             'Batal',
