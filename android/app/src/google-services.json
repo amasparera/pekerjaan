@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "905675226429",
+    "project_id": "pekerjaan-9d0ac",
+    "storage_bucket": "pekerjaan-9d0ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905675226429:android:63eca6109e4ee723a99954",
+        "android_client_info": {
+          "package_name": "com.example.pekerjaan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905675226429-1j8e1cmbdp124sips9984td13cuht2rb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyvDr031ROzf_gAHG8wXzZZw4axxU6bGE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "905675226429-1j8e1cmbdp124sips9984td13cuht2rb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
