@@ -59,7 +59,7 @@ class _HomeViewState extends State<HomeView> {
                   pekerjaan[index].name!,
                   style: const TextStyle(fontSize: 20),
                 ),
-                leading: Icon(Icons.work),
+                leading: const Icon(Icons.work),
               );
             },
           );
@@ -81,7 +81,7 @@ class _HomeViewState extends State<HomeView> {
             child: Row(
               children: const [
                 Icon(Icons.add),
-                Text('Add list'),
+                Text('Tambah pekerjaan'),
               ],
             ),
           ),

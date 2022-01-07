@@ -22,10 +22,10 @@ class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
-      name: _Paths.PEKERJAAN,
-      page: () => const PekerjaanView(),
-      binding: PekerjaanBinding(),
-    ),
+        name: _Paths.PEKERJAAN,
+        page: () => const PekerjaanView(),
+        binding: PekerjaanBinding(),
+        transition: Transition.rightToLeft),
     GetPage(
       name: _Paths.LOGIN,
       page: () => const LoginView(),
