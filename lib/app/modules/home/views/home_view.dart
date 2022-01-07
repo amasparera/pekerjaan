@@ -41,9 +41,7 @@ class _HomeViewState extends State<HomeView> {
           return const Text("Loading");
         } else {
           List<CategoryModel> pekerjaan = snapshot.data!.docs
-              .map(
-                (e) => CategoryModel.fromJson(e.data()),
-              )
+              .map((e) => CategoryModel.fromJson(e.data()))
               .toList();
 
           return ListView.builder(
@@ -54,7 +52,7 @@ class _HomeViewState extends State<HomeView> {
                   showDialog(
                       context: context,
                       builder: (context) => edit(context,
-                          'LZspgNxZdw7tqU1FN4Fs', pekerjaan[index].name!));
+                          'C7XIMtmbTsryGe4Ignqf', pekerjaan[index].name!));
                 },
                 onTap: () => controller.toPekerjaan(index),
                 title: Text(pekerjaan[index].name!),
@@ -106,17 +104,38 @@ class _HomeViewState extends State<HomeView> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TextButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: const Text('Batal'),
+                Expanded(
+                  child: Container(
+                      padding: const EdgeInsets.all(10),
+                      color: Colors.red,
+                      child: InkWell(
+                          onTap: () => Get.back(),
+                          child: const Center(
+                              child: Text(
+                            'Batal',
+                            style: TextStyle(color: Colors.white),
+                          )))),
                 ),
-                TextButton(
-                    onPressed: () {
-                      controller.addPekerjaan();
-                    },
-                    child: const Text('Simpan'))
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    color: Colors.blue,
+                    child: InkWell(
+                      onTap: () {
+                        controller.addPekerjaan();
+                      },
+                      child: const Center(
+                        child: Text(
+                          'Simpan',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
               ],
             )
           ],

@@ -11,7 +11,8 @@ void main() async {
   // await GetStorage.init();
   runApp(
     GetMaterialApp(
-      title: "Application",
+      debugShowCheckedModeBanner: false,
+      title: "Pekerjaan",
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
     ),
