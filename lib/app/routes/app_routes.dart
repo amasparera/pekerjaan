@@ -9,6 +9,8 @@ abstract class Routes {
   static const PEKERJAAN = _Paths.PEKERJAAN;
   // ignore: constant_identifier_names
   static const LOGIN = _Paths.LOGIN;
+  // ignore: constant_identifier_names
+  static const PROFILE = _Paths.PROFILE;
 }
 
 abstract class _Paths {
@@ -19,4 +21,6 @@ abstract class _Paths {
   static const PEKERJAAN = '/pekerjaan';
   // ignore: constant_identifier_names
   static const LOGIN = '/login';
+  // ignore: constant_identifier_names
+  static const PROFILE = '/profile';
 }

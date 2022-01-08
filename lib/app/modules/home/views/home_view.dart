@@ -4,16 +4,11 @@ import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
 
 import 'package:pekerjaan/app/modules/home/controllers/home_controller.dart';
+import 'package:pekerjaan/app/routes/app_pages.dart';
 
-class HomeView extends StatefulWidget {
+class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
 
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  final controller = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +24,10 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget listKategory() {
-    final Stream<QuerySnapshot> usersStream =
-        FirebaseFirestore.instance.collection('pekerjaan').snapshots();
+    final Stream<QuerySnapshot> usersStream = FirebaseFirestore.instance
+        .collection('pekerjaan')
+        .where('idUser', arrayContains: controller.userIdSaya)
+        .snapshots();
 
     return StreamBuilder<QuerySnapshot>(
       stream: usersStream,
@@ -47,19 +44,22 @@ class _HomeViewState extends State<HomeView> {
           return ListView.builder(
             itemCount: pekerjaan.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                onLongPress: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => edit(context,
-                          'C7XIMtmbTsryGe4Ignqf', pekerjaan[index].name!));
-                },
-                onTap: () => controller.toPekerjaan(index),
-                title: Text(
-                  pekerjaan[index].name!,
-                  style: const TextStyle(fontSize: 20),
+              return Container(
+                margin: const EdgeInsets.all(4),
+                color: Colors.amber[50],
+                child: ListTile(
+                  onLongPress: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => edit(context, pekerjaan[index]));
+                  },
+                  onTap: () => controller.toPekerjaan(index),
+                  title: Text(
+                    pekerjaan[index].name!,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  leading: const Icon(Icons.work),
                 ),
-                leading: const Icon(Icons.work),
               );
             },
           );
@@ -70,6 +70,7 @@ class _HomeViewState extends State<HomeView> {
 
   Container bottomAdd(context) {
     return Container(
+      padding: const EdgeInsets.only(right: 12),
       height: 50,
       color: Colors.blue[200],
       child: Row(
@@ -85,6 +86,14 @@ class _HomeViewState extends State<HomeView> {
               ],
             ),
           ),
+          const Spacer(),
+          IconButton(
+              onPressed: () {
+                Get.toNamed(Routes.PROFILE);
+                // ignore: avoid_print
+                print('object');
+              },
+              icon: const Icon(Icons.person))
         ],
       ),
     );
@@ -150,14 +159,14 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget edit(context, id, name) {
+  Widget edit(context, CategoryModel model) {
     return Dialog(
       child: Container(
         padding: const EdgeInsets.all(10),
         height: 300,
         child: Column(
           children: [
-            Text('Angota - $name'),
+            Text('Angota - ${model.name}'),
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Divider(
@@ -165,15 +174,21 @@ class _HomeViewState extends State<HomeView> {
                 height: 4,
               ),
             ),
-            Expanded(child: Container()),
+            Expanded(
+                child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    itemCount: model.idUser!.length,
+                    itemBuilder: (context, index) =>
+                        Text(model.idUser![index]))),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
                   color: Colors.blue,
                   padding: const EdgeInsets.all(10),
-                  child: const InkWell(
-                    child: Text(
+                  child: InkWell(
+                    onTap: () {},
+                    child: const Text(
                       'Tambahkan Angota',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -185,7 +200,7 @@ class _HomeViewState extends State<HomeView> {
                       const EdgeInsets.symmetric(horizontal: 45, vertical: 10),
                   child: InkWell(
                     onTap: () {
-                      controller.hapus(id);
+                      controller.hapus(model.idPekerjaan);
                       Get.back();
                     },
                     child: const Text(

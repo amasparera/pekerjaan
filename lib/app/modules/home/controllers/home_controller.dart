@@ -6,15 +6,17 @@ import 'package:pekerjaan/app/routes/app_pages.dart';
 
 class HomeController extends GetxController {
   TextEditingController text = TextEditingController();
-  String saya = Myuser.demo;
+
+  late String userIdSaya;
 
   void toPekerjaan(int index) {
     Get.toNamed(Routes.PEKERJAAN);
   }
 
-  void addPekerjaan() {
+  void addPekerjaan() async {
     if (text.text != '') {
-      FirebaseFirestroreku().pekerjaanAdd(text.text, saya);
+      String userIdSaya = Myuser().loadEmail();
+      FirebaseFirestroreku().pekerjaanAdd(text.text, userIdSaya);
       text.clear();
       Get.back();
     }
@@ -27,5 +29,15 @@ class HomeController extends GetxController {
 
   void hapus(id) {
     FirebaseFirestroreku().hapus(id);
+  }
+
+  void init() async {
+    userIdSaya = Myuser().loadEmail();
+  }
+
+  @override
+  void onInit() {
+    init();
+    super.onInit();
   }
 }

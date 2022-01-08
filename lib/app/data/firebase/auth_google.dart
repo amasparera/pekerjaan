@@ -57,7 +57,6 @@ class AuthUser {
   signOut() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     GetStorage box = GetStorage();
-
     box.erase();
     await _auth.signOut().then((value) => Get.offAllNamed(Routes.LOGIN));
   }

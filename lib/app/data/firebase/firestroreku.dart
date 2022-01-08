@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pekerjaan/app/data/model/model_category.dart';
 
 class FirebaseFirestroreku {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -19,18 +20,24 @@ class FirebaseFirestroreku {
   }
 
   pekerjaanAdd(nama, iduser) async {
+    final resul = FirebaseFirestore.instance.collection('pekerjaan').doc();
+
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = nama;
     data['idUser'] = [iduser];
-
-    final resul =
-        await FirebaseFirestore.instance.collection('pekerjaan').add(data);
-    return await FirebaseFirestore.instance
-        .collection('listid')
-        .add({'id': resul.id.toString()});
+    data['id'] = resul.id;
+    return resul.set(data);
   }
 
   hapus(id) async {
     await FirebaseFirestore.instance.collection('pekerjaan').doc(id).delete();
+  }
+
+  tambahAnggota(CategoryModel model, iduser) {
+    final DocumentReference resul = FirebaseFirestore.instance
+        .collection('pekerjaan')
+        .doc(model.idPekerjaan);
+
+    resul.update({'idUser': []});
   }
 }

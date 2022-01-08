@@ -1,7 +1,6 @@
 import 'package:get_storage/get_storage.dart';
 
 class Myuser {
-  static String demo = 'iabfai7338gf47389h2910nfi';
   //  key db
   static String userIdKEY = 'userkey';
   static String userNameKEY = 'usernamekey';
@@ -9,7 +8,7 @@ class Myuser {
   static String userEmailKEY = 'useremailkey';
   static String userProfilePicKEY = 'userprofilepickey';
 
-  // getstorage
+  // save getstorage
   final GetStorage _box = GetStorage();
 
   // save getstorage

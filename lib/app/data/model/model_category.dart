@@ -8,6 +8,7 @@ class CategoryModel {
   CategoryModel.fromJson(json) {
     name = json['name'];
     idUser = json['idUser'];
+    idPekerjaan = json['id'];
   }
 
   Map<String, dynamic> toJson() {
