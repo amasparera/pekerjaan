@@ -177,10 +177,10 @@ class HomeView extends GetView<HomeController> {
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                itemCount: model.namauser!.length,
+                itemCount: model.idUser!.length,
                 itemBuilder: (context, index) => Padding(
                   padding: const EdgeInsets.all(2),
-                  child: Text('${index + 1}. ${model.namauser![index]}'),
+                  child: Text('${index + 1}. ${model.idUser![index]}'),
                 ),
               ),
             ),

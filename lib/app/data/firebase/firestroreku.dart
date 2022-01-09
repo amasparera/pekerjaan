@@ -59,11 +59,11 @@ class FirebaseFirestroreku {
     });
   }
 
-  tambahAnggota(iddocument, listnama, iduser) {
+  tambahAnggota(iddocument, iduser) {
     FirebaseFirestore.instance
         .collection('pekerjaan')
         .doc(iddocument)
-        .update({'listnama': listnama, 'idUser': iduser});
+        .update({'idUser': iduser});
   }
 
   Future<DocumentReference<Map<String, dynamic>>> documentTugas(id) async {

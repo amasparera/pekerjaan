@@ -21,23 +21,22 @@ class HomeController extends GetxController {
       await FlutterBarcodeScanner.scanBarcode(
               "#ff6666", "Cancel", false, ScanMode.QR)
           .then((value) async {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(value)
-            .get()
-            .then((value) {
-          if (value.exists) {
-            UserModel userModel = UserModel.fromJson(value.data()!);
-            List nama = model.namauser!;
-            nama.add(userModel.name);
+        // await FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(value)
+        //     .get()
+        //     .then((value) {
+        //   if (value.exists) {
+        //     UserModel userModel = UserModel.fromJson(value.data()!);
+        //     List nama = model.namauser!;
+        //     nama.add(userModel.name);
 
-            List listid = model.idUser!;
-            listid.add(value);
-            return FirebaseFirestroreku()
-                .tambahAnggota(model.idPekerjaan, nama, listid);
-          }
-        });
-      });
+        List listid = model.idUser!;
+        listid.add(value);
+        return FirebaseFirestroreku().tambahAnggota(model.idPekerjaan, listid);
+      }
+              // });
+              );
       // ignore: empty_catches
     } on PlatformException {}
   }
