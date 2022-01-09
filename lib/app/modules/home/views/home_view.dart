@@ -53,7 +53,8 @@ class HomeView extends GetView<HomeController> {
                         context: context,
                         builder: (context) => edit(context, pekerjaan[index]));
                   },
-                  onTap: () => controller.toPekerjaan(index),
+                  onTap: () =>
+                      controller.toPekerjaan(pekerjaan[index].idPekerjaan),
                   title: Text(
                     pekerjaan[index].name!,
                     style: const TextStyle(fontSize: 20),
@@ -88,10 +89,9 @@ class HomeView extends GetView<HomeController> {
           ),
           const Spacer(),
           IconButton(
+              splashRadius: 15,
               onPressed: () {
                 Get.toNamed(Routes.PROFILE);
-                // ignore: avoid_print
-                print('object');
               },
               icon: const Icon(Icons.person))
         ],
@@ -175,11 +175,15 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             Expanded(
-                child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    itemCount: model.idUser!.length,
-                    itemBuilder: (context, index) =>
-                        Text(model.idUser![index]))),
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                itemCount: model.namauser!.length,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Text('${index + 1}. ${model.namauser![index]}'),
+                ),
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -187,7 +191,9 @@ class HomeView extends GetView<HomeController> {
                   color: Colors.blue,
                   padding: const EdgeInsets.all(10),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      controller.tambahAnggota(model);
+                    },
                     child: const Text(
                       'Tambahkan Angota',
                       style: TextStyle(color: Colors.white),

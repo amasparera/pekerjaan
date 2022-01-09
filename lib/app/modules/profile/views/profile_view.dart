@@ -11,33 +11,35 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
-          title: const Text('ProfileView'),
-          centerTitle: true,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        title: const Text('ProfileView'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            textTile('Nama :', controller.myUser.name),
+            textTile('Username :', controller.myUser.username),
+            textTile('Email :', controller.myUser.email),
+            textTile('User ID :', controller.myUser.id),
+            const SizedBox(height: 24),
+            buildQr(context),
+            const SizedBox(height: 24),
+            Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    controller.logOut();
+                  },
+                  child: const Text('Log Out')),
+            )
+          ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              textTile('Nama :', controller.myUser.name),
-              textTile('Username :', controller.myUser.username),
-              textTile('Email :', controller.myUser.email),
-              textTile('User ID :', controller.myUser.id),
-              const SizedBox(height: 24),
-              buildQr(context),
-              const SizedBox(height: 24),
-              Center(
-                  child: ElevatedButton(
-                      onPressed: () {
-                        controller.logOut();
-                      },
-                      child: const Text('Log Out')))
-            ],
-          ),
-        ));
+      ),
+    );
   }
 
   Widget textTile(nama, usernama) {

@@ -1,20 +1,23 @@
 class PekerjaanModel {
-  String? categoty;
+  String? id;
   String? name;
+  String? namePekerja;
   bool? status;
   List? day = [];
   PekerjaanModel(
-      {required this.categoty,
+      {required this.id,
       required this.name,
       required this.status,
-      required});
+      required this.namePekerja});
 
   PekerjaanModel.fromJson(
     json,
   ) {
-    status = json['dikerjakan'];
+    namePekerja = json['namapekerja'];
+    status = json['status'];
     name = json['name'];
     day = json['day'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {

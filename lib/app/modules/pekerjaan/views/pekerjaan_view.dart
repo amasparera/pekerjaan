@@ -31,8 +31,8 @@ class PekerjaanView extends GetView<PekerjaanController> {
   Widget body() {
     final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
         .collection('pekerjaan')
-        .doc('gHDRoaPvHupLJfpxTq0R')
-        .collection('rincian')
+        .doc(controller.argumen)
+        .collection('tugas')
         .snapshots();
     return StreamBuilder<QuerySnapshot>(
         stream: _usersStream,
@@ -45,20 +45,26 @@ class PekerjaanView extends GetView<PekerjaanController> {
             );
           } else {
             List<PekerjaanModel> pekerjaan = snapshot.data!.docs
-                .map(
-                  (e) => PekerjaanModel.fromJson(
-                    e.data(),
-                  ),
-                )
+                .map((e) => PekerjaanModel.fromJson(e.data()))
                 .toList();
             return ListView.builder(
               itemCount: pekerjaan.length,
               itemBuilder: (context, index) => ListTile(
                 onTap: () {
-                  controller.dikerjakan(index);
+                  controller.mengerjakan(pekerjaan[index].id);
                 },
-                leading: const Icon(Icons.run_circle_rounded),
-                title: const Text(''),
+                leading: pekerjaan[index].status == false
+                    ? const Icon(Icons.circle_outlined)
+                    : const Icon(Icons.run_circle_rounded, color: Colors.blue),
+                title: pekerjaan[index].status == false
+                    ? Text(pekerjaan[index].name!)
+                    : Text('(${pekerjaan[index].name!})',
+                        style: const TextStyle(
+                            color: Colors.grey,
+                            decoration: TextDecoration.lineThrough)),
+                trailing: Text(pekerjaan[index].namePekerja!,
+                    style: const TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold)),
               ),
             );
           }
