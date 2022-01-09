@@ -20,6 +20,7 @@ class PekerjaanController extends GetxController {
       return FirebaseFirestroreku()
           .menambahTugas(data: map, id: argumen, idtugas: value.id);
     });
+    input.clear();
   }
 
   void mengerjakan(idtugas) async {

@@ -74,7 +74,7 @@ class ProfileView extends GetView<ProfileController> {
         decoration:
             BoxDecoration(border: Border.all(width: 5, color: Colors.black)),
         child: QrImage(
-          data: controller.myUser.email!,
+          data: controller.myUser.id!,
         ),
       ),
     );

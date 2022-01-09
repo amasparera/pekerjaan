@@ -43,8 +43,6 @@ class FirebaseFirestroreku {
         .then((value) {
       if (value.exists) {
         return UserModel.fromJson(value.data()!);
-      } else {
-        return null;
       }
     });
   }
