@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/firebase/firestroreku.dart';
 import 'package:pekerjaan/app/data/getstore/myuser.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
-import 'package:pekerjaan/app/data/model/myuser.dart';
 import 'package:pekerjaan/app/routes/app_pages.dart';
 
 class HomeController extends GetxController {
