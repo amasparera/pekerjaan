@@ -173,15 +173,17 @@ class HomeView extends GetView<HomeController> {
     return Dialog(
       child: Container(
         padding: const EdgeInsets.all(10),
-        height: 300,
+        height: 350,
         child: Column(
           children: [
             Text('Angota - ${model.name}'),
+            const SizedBox(height: 8),
+            Text('${model.idPekerjaan}'),
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Divider(
                 color: Colors.grey,
-                height: 4,
+                thickness: 2,
               ),
             ),
             Expanded(
@@ -190,43 +192,74 @@ class HomeView extends GetView<HomeController> {
                 itemCount: model.idUser!.length,
                 itemBuilder: (context, index) => Padding(
                   padding: const EdgeInsets.all(2),
-                  child: Text('${index + 1}. ${model.idUser![index]}'),
+                  child: Text('${index + 1}. ${model.namauser![index]}'),
                 ),
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  color: Colors.blue,
-                  padding: const EdgeInsets.all(10),
-                  child: InkWell(
-                    onTap: () async {
-                      controller.tambahAnggota(model);
-                    },
-                    child: const Text(
-                      'Tambahkan Angota',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.red,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 45, vertical: 10),
-                  child: InkWell(
-                    onTap: () {
-                      controller.hapus(model.idPekerjaan);
-                      Get.back();
-                    },
-                    child: const Text(
-                      'hapus',
-                      style: TextStyle(color: Colors.white),
+                Expanded(
+                  child: Container(
+                    color: Colors.blue,
+                    padding: const EdgeInsets.all(10),
+                    child: InkWell(
+                      onTap: () async {},
+                      child: const Center(
+                        child: Text(
+                          'salin Id',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ],
-            )
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    color: Colors.blue,
+                    padding: const EdgeInsets.all(10),
+                    child: InkWell(
+                      onTap: () async {
+                        controller.tambahAnggota(model);
+                      },
+                      child: const Center(
+                        child: Text(
+                          'Tambahkan Angota',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: Colors.red,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 45, vertical: 10),
+                    child: InkWell(
+                      onTap: () {
+                        controller.hapus(model.idPekerjaan);
+                        Get.back();
+                      },
+                      child: const Center(
+                        child: Text(
+                          'hapus',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

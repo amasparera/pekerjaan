@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
 import 'package:pekerjaan/app/data/model/myuser.dart';
 
@@ -65,11 +66,26 @@ class FirebaseFirestroreku {
     });
   }
 
-  tambahAnggota(iddocument, iduser) {
+  tambahAnggota(iddocument, iduser, listnama) {
     FirebaseFirestore.instance
         .collection('pekerjaan')
         .doc(iddocument)
-        .update({'idUser': iduser});
+        .update({'idUser': iduser, 'listnama': listnama});
+  }
+
+  Future<CategoryModel?> gabung(id) async {
+    await FirebaseFirestore.instance
+        .collection('pekerjaan')
+        .doc(id)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        return CategoryModel.fromJson(value.data());
+      } else {
+        Get.snackbar('Error', 'Data tidak ditemukan');
+        return null;
+      }
+    });
   }
 
   Future<DocumentReference<Map<String, dynamic>>> documentTugas(id) async {

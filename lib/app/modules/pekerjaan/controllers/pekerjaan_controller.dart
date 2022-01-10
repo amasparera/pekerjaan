@@ -9,6 +9,7 @@ class PekerjaanController extends GetxController {
 
   var argumen = Get.arguments;
   var hariini = 'Tgl Hari Ini'.obs;
+  var descripsi = 'sekali hari ini'.obs;
 
   var waktuSekarang = DateTime.now().obs;
 
@@ -28,6 +29,7 @@ class PekerjaanController extends GetxController {
           'name': input.text,
           'status': false,
           'namapekerja': '',
+          'descripsi': descripsi.value,
           'hariini': waktuSekarang.value
         };
         return FirebaseFirestroreku()
@@ -64,6 +66,7 @@ class PekerjaanController extends GetxController {
           'name': input.text,
           'status': false,
           'namapekerja': '',
+          'descripsi': descripsi.value,
           'update': waktuSekarang.value,
           'day': day
         };

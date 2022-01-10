@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/firebase/firestroreku.dart';
 import 'package:pekerjaan/app/data/getstore/myuser.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
+import 'package:pekerjaan/app/data/model/myuser.dart';
 import 'package:pekerjaan/app/routes/app_pages.dart';
 
 class HomeController extends GetxController {
@@ -30,10 +32,22 @@ class HomeController extends GetxController {
         //     nama.add(userModel.name);
         Get.snackbar('hasil scane', value);
         if (value != '-1') {
+          List nama = model.namauser!;
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(value)
+              .get()
+              .then((value) {
+            if (value.exists) {
+              UserModel userModel = UserModel.fromJson(value.data()!);
+
+              nama.add(userModel.name);
+            }
+          });
           List listid = model.idUser!;
           listid.add(value);
           return FirebaseFirestroreku()
-              .tambahAnggota(model.idPekerjaan, listid);
+              .tambahAnggota(model.idPekerjaan, listid, nama);
         }
       }
               // });
@@ -65,7 +79,7 @@ class HomeController extends GetxController {
 
   void init() async {
     userIdSaya = Myuser().loadUserId();
-    myName = Myuser().loadUserName();
+    myName = Myuser().loadDisplayName();
   }
 
   @override

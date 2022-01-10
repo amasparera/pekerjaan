@@ -78,6 +78,10 @@ class PekerjaanView extends GetView<PekerjaanController> {
                         style: const TextStyle(
                             color: Colors.grey,
                             decoration: TextDecoration.lineThrough)),
+                subtitle: Text(
+                  '${pekerjaan[index].descripsi}',
+                  style: const TextStyle(fontStyle: FontStyle.italic),
+                ),
                 trailing: Text(pekerjaan[index].namePekerja!,
                     style: const TextStyle(
                         color: Colors.blue, fontWeight: FontWeight.bold)),
@@ -188,6 +192,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
             color: Colors.blue[200],
             padding: const EdgeInsets.all(10),
             child: TextField(
+              autofocus: false,
               onChanged: (val) {
                 // ignore: avoid_print
                 print(val);
@@ -217,6 +222,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
                   onTap: () {
                     controller.opsiTgl.value = 1;
                     controller.hariini.value = 'Tgl Hari Ini';
+                    controller.descripsi.value = 'Hari ini';
                     controller.waktuSekarang.value = DateTime.now();
                   },
                   child: Container(
@@ -242,6 +248,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
                   onTap: () {
                     controller.opsiTgl.value = 2;
                     controller.hariini.value = 'Tgl Order';
+                    controller.descripsi.value = 'Order hari ini';
                     controller.orderTime(context);
                   },
                   child: Container(
@@ -265,6 +272,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
                   onTap: () {
                     controller.opsiTgl.value = 3;
                     controller.hariini.value = 'Tgl Hari Ini';
+                    controller.descripsi.value = 'Berulang';
                     controller.waktuSekarang.value = DateTime.now();
                     showDialog(
                         context: context, builder: (context) => dialogUlangi());
@@ -368,7 +376,6 @@ class PekerjaanView extends GetView<PekerjaanController> {
             Expanded(
               child: Container(
                 margin: const EdgeInsets.all(2),
-                padding: const EdgeInsets.symmetric(vertical: 14),
                 color: Colors.blue,
                 child: InkWell(
                   onTap: () {
