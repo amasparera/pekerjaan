@@ -8,28 +8,81 @@ class PekerjaanController extends GetxController {
   var opsiTgl = 1.obs;
 
   var argumen = Get.arguments;
+  var hariini = 'Tgl Hari Ini'.obs;
 
-  DateTime waktuSekarang = DateTime.now();
+  var waktuSekarang = DateTime.now().obs;
+
+  var senin = false.obs;
+  var selasa = false.obs;
+  var rabu = false.obs;
+  var kamis = false.obs;
+  var jumat = false.obs;
+  var sabtu = false.obs;
+  var minggu = false.obs;
 
   void menambahkanPekerjan() async {
-    if (input.text != '') {
+    if (input.text != '' && opsiTgl.value != 3) {
       await FirebaseFirestroreku().documentTugas(argumen).then((value) {
-        Map<String, dynamic> map = {};
+        Map<String, dynamic> map = {
+          'id': value.id,
+          'name': input.text,
+          'status': false,
+          'namapekerja': '',
+          'hariini': waktuSekarang.value
+        };
+        return FirebaseFirestroreku()
+            .menambahTugas(data: map, id: argumen, idtugas: value.id);
+      });
+      input.clear();
+    } else {
+      await FirebaseFirestroreku().documentTugas(argumen).then((value) {
+        List day = [];
 
-        if (opsiTgl.value == 1) {
-          map = {
-            'id': value.id,
-            'name': input.text,
-            'status': false,
-            'namapekerja': '',
-            'hariini': waktuSekarang
-          };
-        } else if (opsiTgl.value == 2) {}
+        if (senin.isTrue) {
+          day.add(DateTime.monday);
+        }
+        if (selasa.isTrue) {
+          day.add(DateTime.tuesday);
+        }
+        if (rabu.isTrue) {
+          day.add(DateTime.wednesday);
+        }
+        if (kamis.isTrue) {
+          day.add(DateTime.thursday);
+        }
+        if (jumat.isTrue) {
+          day.add(DateTime.friday);
+        }
+        if (sabtu.isTrue) {
+          day.add(DateTime.saturday);
+        }
+        if (minggu.isTrue) {
+          day.add(DateTime.sunday);
+        }
+        Map<String, dynamic> map = {
+          'id': value.id,
+          'name': input.text,
+          'status': false,
+          'namapekerja': '',
+          'update': waktuSekarang.value,
+          'day': day
+        };
 
         return FirebaseFirestroreku()
             .menambahTugas(data: map, id: argumen, idtugas: value.id);
       });
       input.clear();
+    }
+  }
+
+  void orderTime(context) async {
+    DateTime? order = await showDatePicker(
+        context: context,
+        initialDate: waktuSekarang.value,
+        firstDate: DateTime(2021),
+        lastDate: DateTime(2030));
+    if (order != null) {
+      waktuSekarang.value = order;
     }
   }
 

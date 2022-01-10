@@ -16,12 +16,20 @@ class PekerjaanView extends GetView<PekerjaanController> {
       appBar: AppBar(
         elevation: 0,
         title: const Text('Semua Pekerjaan'),
+        actions: [
+          Center(
+              child: Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Obx(() => Text(
+                '${controller.hariini.value} ${controller.waktuSekarang.value.day}.')),
+          ))
+        ],
       ),
       body: GestureDetector(
         child: Stack(
           children: [
             body(),
-            menambahPekerjaan(),
+            menambahPekerjaan(context),
           ],
         ),
       ),
@@ -170,10 +178,10 @@ class PekerjaanView extends GetView<PekerjaanController> {
         ),
       );
 
-  Widget menambahPekerjaan() => Column(
+  Widget menambahPekerjaan(context) => Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          requesTanggal(),
+          requesTanggal(context),
           Container(
             height: 75,
             alignment: Alignment.bottomCenter,
@@ -199,14 +207,18 @@ class PekerjaanView extends GetView<PekerjaanController> {
         ],
       );
 
-  Widget requesTanggal() {
+  Widget requesTanggal(context) {
     return SizedBox(
       height: 35,
       child: Row(
         children: [
           Expanded(
             child: Obx(() => InkWell(
-                  onTap: () => controller.opsiTgl.value = 1,
+                  onTap: () {
+                    controller.opsiTgl.value = 1;
+                    controller.hariini.value = 'Tgl Hari Ini';
+                    controller.waktuSekarang.value = DateTime.now();
+                  },
                   child: Container(
                     margin: const EdgeInsets.only(left: 4, right: 2, bottom: 4),
                     decoration: BoxDecoration(
@@ -227,7 +239,11 @@ class PekerjaanView extends GetView<PekerjaanController> {
           ),
           Expanded(
             child: Obx(() => InkWell(
-                  onTap: () => controller.opsiTgl.value = 2,
+                  onTap: () {
+                    controller.opsiTgl.value = 2;
+                    controller.hariini.value = 'Tgl Order';
+                    controller.orderTime(context);
+                  },
                   child: Container(
                     margin: const EdgeInsets.only(left: 2, right: 2, bottom: 4),
                     decoration: BoxDecoration(
@@ -246,7 +262,13 @@ class PekerjaanView extends GetView<PekerjaanController> {
           ),
           Expanded(
             child: Obx(() => InkWell(
-                  onTap: () => controller.opsiTgl.value = 3,
+                  onTap: () {
+                    controller.opsiTgl.value = 3;
+                    controller.hariini.value = 'Tgl Hari Ini';
+                    controller.waktuSekarang.value = DateTime.now();
+                    showDialog(
+                        context: context, builder: (context) => dialogUlangi());
+                  },
                   child: Container(
                     margin: const EdgeInsets.only(left: 2, right: 4, bottom: 4),
                     decoration: BoxDecoration(
@@ -266,6 +288,103 @@ class PekerjaanView extends GetView<PekerjaanController> {
                 )),
           )
         ],
+      ),
+    );
+  }
+
+  Widget dialogUlangi() {
+    return Dialog(
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        height: 500,
+        child: Column(
+          children: [
+            const Text(
+              'Pilih Hari ',
+              style: TextStyle(fontSize: 18),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(4),
+              child: Divider(
+                thickness: 2,
+              ),
+            ),
+            Obx(() => ListTile(
+                  leading: Checkbox(
+                      value: controller.senin.value,
+                      onChanged: (value) {
+                        controller.senin.value = value!;
+                      }),
+                  title: const Text('Senin'),
+                )),
+            Obx(() => ListTile(
+                  leading: Checkbox(
+                      value: controller.selasa.value,
+                      onChanged: (value) {
+                        controller.selasa.value = value!;
+                      }),
+                  title: const Text('Selasa'),
+                )),
+            Obx(() => ListTile(
+                  leading: Checkbox(
+                      value: controller.rabu.value,
+                      onChanged: (value) {
+                        controller.rabu.value = value!;
+                      }),
+                  title: const Text('Rabu'),
+                )),
+            Obx(() => ListTile(
+                  leading: Checkbox(
+                      value: controller.kamis.value,
+                      onChanged: (value) {
+                        controller.kamis.value = value!;
+                      }),
+                  title: const Text('Kamis'),
+                )),
+            Obx(() => ListTile(
+                  leading: Checkbox(
+                      value: controller.jumat.value,
+                      onChanged: (value) {
+                        controller.jumat.value = value!;
+                      }),
+                  title: const Text('Jum\'at'),
+                )),
+            Obx(() => ListTile(
+                  leading: Checkbox(
+                      value: controller.sabtu.value,
+                      onChanged: (value) {
+                        controller.sabtu.value = value!;
+                      }),
+                  title: const Text('Sabtu'),
+                )),
+            Obx(() => ListTile(
+                  leading: Checkbox(
+                      value: controller.minggu.value,
+                      onChanged: (value) {
+                        controller.minggu.value = value!;
+                      }),
+                  title: const Text('Minggu'),
+                )),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(2),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                color: Colors.blue,
+                child: InkWell(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: const Center(
+                    child: Text(
+                      'Simpan',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

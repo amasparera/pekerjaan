@@ -12,6 +12,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[50],
       appBar: AppBar(
         elevation: 0,
         title: const Text('Kategori Pekerjaan'),
@@ -42,12 +43,13 @@ class HomeView extends GetView<HomeController> {
               .toList();
 
           return ListView.builder(
-            padding: const EdgeInsets.only(bottom: 50),
+            padding:
+                const EdgeInsets.only(bottom: 50, right: 2, left: 2, top: 2),
             itemCount: pekerjaan.length,
             itemBuilder: (context, index) {
               return Container(
                 margin: const EdgeInsets.all(4),
-                color: Colors.amber[50],
+                color: Colors.white,
                 child: ListTile(
                   onLongPress: () {
                     showDialog(
@@ -58,7 +60,7 @@ class HomeView extends GetView<HomeController> {
                       controller.toPekerjaan(pekerjaan[index].idPekerjaan),
                   title: Text(
                     pekerjaan[index].name!,
-                    style: const TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20, color: Colors.blue),
                   ),
                   leading: const Icon(Icons.work),
                 ),
@@ -74,7 +76,7 @@ class HomeView extends GetView<HomeController> {
     return Container(
       padding: const EdgeInsets.only(right: 12),
       height: 50,
-      color: Colors.blue[200],
+      color: Colors.blue,
       child: Row(
         children: [
           MaterialButton(
@@ -83,8 +85,11 @@ class HomeView extends GetView<HomeController> {
             },
             child: Row(
               children: const [
-                Icon(Icons.add),
-                Text('Tambah pekerjaan'),
+                Icon(Icons.add, color: Colors.white),
+                Text(
+                  'Tambah pekerjaan',
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
           ),
@@ -94,7 +99,10 @@ class HomeView extends GetView<HomeController> {
               onPressed: () {
                 Get.toNamed(Routes.PROFILE);
               },
-              icon: const Icon(Icons.person))
+              icon: const Icon(
+                Icons.person,
+                color: Colors.white,
+              ))
         ],
       ),
     );
