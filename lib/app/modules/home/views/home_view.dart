@@ -42,6 +42,7 @@ class HomeView extends GetView<HomeController> {
               .toList();
 
           return ListView.builder(
+            padding: const EdgeInsets.only(bottom: 50),
             itemCount: pekerjaan.length,
             itemBuilder: (context, index) {
               return Container(
@@ -110,6 +111,7 @@ class HomeView extends GetView<HomeController> {
           children: [
             const Text('Nama Pekerjan'),
             TextField(
+              autofocus: true,
               controller: controller.text,
             ),
             const SizedBox(height: 10),

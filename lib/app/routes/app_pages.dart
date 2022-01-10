@@ -18,6 +18,7 @@ class AppPages {
 
   // ignore: non_constant_identifier_names
   static String? INITIAL() {
+    // AuthUser().signOut();
     User? auth = FirebaseAuth.instance.currentUser;
     return (auth == null) ? Routes.LOGIN : Routes.HOME;
   }

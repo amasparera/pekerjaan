@@ -32,7 +32,13 @@ class FirebaseFirestroreku {
   }
 
   hapus(id) async {
-    await FirebaseFirestore.instance.collection('pekerjaan').doc(id).delete();
+    await FirebaseFirestore.instance
+        .collection('pekerjaan')
+        .doc(id)
+        .collection('tugas')
+        .doc()
+        .delete();
+    // await FirebaseFirestore.instance.collection('pekerjaan').doc(id).delete();
   }
 
   getUserModel(id) async {
@@ -92,5 +98,26 @@ class FirebaseFirestroreku {
         .collection('tugas')
         .doc(idtugas)
         .update({'status': true, 'namapekerja': namapekerja});
+  }
+
+  belumDikerjaan({
+    id,
+    idtugas,
+  }) async {
+    return FirebaseFirestore.instance
+        .collection('pekerjaan')
+        .doc(id)
+        .collection('tugas')
+        .doc(idtugas)
+        .update({'status': false, 'namapekerja': ''});
+  }
+
+  hapusTugas({id, idtugas}) {
+    return FirebaseFirestore.instance
+        .collection('pekerjaan')
+        .doc(id)
+        .collection('tugas')
+        .doc(idtugas)
+        .delete();
   }
 }

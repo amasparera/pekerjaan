@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -48,9 +49,8 @@ class AuthUser {
         // ignore: avoid_print
         return print('failed');
       }
-    } catch (e) {
+    } on PlatformException {
       // ignore: avoid_print
-      print(e.toString());
     }
   }
 

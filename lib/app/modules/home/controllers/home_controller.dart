@@ -28,10 +28,13 @@ class HomeController extends GetxController {
         //     UserModel userModel = UserModel.fromJson(value.data()!);
         //     List nama = model.namauser!;
         //     nama.add(userModel.name);
-
-        List listid = model.idUser!;
-        listid.add(value);
-        return FirebaseFirestroreku().tambahAnggota(model.idPekerjaan, listid);
+        Get.snackbar('hasil scane', value);
+        if (value != '-1') {
+          List listid = model.idUser!;
+          listid.add(value);
+          return FirebaseFirestroreku()
+              .tambahAnggota(model.idPekerjaan, listid);
+        }
       }
               // });
               );

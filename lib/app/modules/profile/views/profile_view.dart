@@ -73,9 +73,7 @@ class ProfileView extends GetView<ProfileController> {
         width: MediaQuery.of(context).size.width * .7,
         decoration:
             BoxDecoration(border: Border.all(width: 5, color: Colors.black)),
-        child: QrImage(
-          data: controller.myUser.id!,
-        ),
+        child: QrImage(data: controller.myUser.id!),
       ),
     );
   }

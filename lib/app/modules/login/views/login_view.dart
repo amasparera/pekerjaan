@@ -27,11 +27,13 @@ class LoginView extends GetView<LoginController> {
             width: MediaQuery.of(context).size.width,
             child: Image.asset('assest/Web Security.png'),
           ),
+          SizedBox(height: MediaQuery.of(context).size.width / 5),
           Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: MediaQuery.of(context).size.width * .2),
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: Colors.red[400]),
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.red[400], padding: const EdgeInsets.all(10)),
               onPressed: () {
                 controller.login();
               },
@@ -39,10 +41,7 @@ class LoginView extends GetView<LoginController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assest/Search.png',
-                    width: 30,
-                  ),
+                  Image.asset('assest/Search.png', width: 30),
                   const Text(
                     'Login With Google',
                     style: TextStyle(
