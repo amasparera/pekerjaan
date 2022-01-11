@@ -11,22 +11,26 @@ class PekerjaanView extends GetView<PekerjaanController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('Semua Pekerjaan'),
-        actions: [
-          Center(
-              child: Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Obx(() => Text(
-                '${controller.hariini.value} ${controller.waktuSekarang.value.day}.')),
-          ))
-        ],
-      ),
-      body: GestureDetector(
-        child: Stack(
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: AppBar(
+            elevation: 0,
+            title: const Text('Semua Pekerjaan'),
+            actions: [
+              Center(
+                  child: Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: Obx(() => Text(
+                    '${controller.hariini.value} ${controller.waktuSekarang.value.day}.')),
+              ))
+            ],
+          ),
+        ),
+        body: Stack(
           children: [
             body(),
             menambahPekerjaan(context),
@@ -55,46 +59,56 @@ class PekerjaanView extends GetView<PekerjaanController> {
             List<PekerjaanModel> pekerjaan = snapshot.data!.docs
                 .map((e) => PekerjaanModel.fromJson(e.data()))
                 .toList();
+            pekerjaan.sort((a, b) => a.hariIni!.compareTo(b.hariIni!));
             return ListView.builder(
               padding: const EdgeInsets.only(bottom: 110),
               itemCount: pekerjaan.length,
-              itemBuilder: (context, index) => ListTile(
-                onLongPress: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => dialogEdit(pekerjaan[index].id));
-                },
-                onTap: () {
-                  if (pekerjaan[index].status == false) {
-                    controller.mengerjakan(pekerjaan[index].id);
-                  }
-                },
-                leading: pekerjaan[index].status == false
-                    ? const Icon(Icons.circle_outlined)
-                    : const Icon(Icons.run_circle_rounded, color: Colors.blue),
-                title: pekerjaan[index].status == false
-                    ? Text(pekerjaan[index].name!)
-                    : Text('(${pekerjaan[index].name!})',
-                        style: const TextStyle(
-                            color: Colors.grey,
-                            decoration: TextDecoration.lineThrough)),
-                subtitle: Text(
-                  'Kapan : ${pekerjaan[index].descripsi}',
-                  style: const TextStyle(fontStyle: FontStyle.italic),
-                ),
-                trailing: Text(pekerjaan[index].namePekerja!,
-                    style: const TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold)),
-              ),
+              itemBuilder: (context, index) =>
+                  hariIni(context, pekerjaan, index),
             );
           }
         });
   }
 
+  ListTile hariIni(
+      BuildContext context, List<PekerjaanModel> pekerjaan, int index) {
+    return ListTile(
+      onLongPress: () {
+        showDialog(
+            context: context,
+            builder: (context) => dialogEdit(pekerjaan[index].id));
+        // bool a = DateFormat.E().format(DateTime.now()) ==
+        //     DateFormat.E().format(pekerjaan[index].hariIni!);
+        // print(a.toString());
+      },
+      onTap: () {
+        if (pekerjaan[index].status == false) {
+          controller.mengerjakan(pekerjaan[index].id);
+        }
+      },
+      leading: pekerjaan[index].status == false
+          ? const Icon(Icons.circle_outlined)
+          : const Icon(Icons.run_circle_rounded, color: Colors.blue),
+      title: pekerjaan[index].status == false
+          ? Text(pekerjaan[index].name!)
+          : Text(pekerjaan[index].name!,
+              style: const TextStyle(
+                  color: Colors.grey, decoration: TextDecoration.lineThrough)),
+      subtitle: Text(
+        '${pekerjaan[index].descripsi} ${pekerjaan[index].hariIni!.day}',
+        style: const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+      ),
+      trailing: Text(pekerjaan[index].namePekerja!,
+          style:
+              const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
+    );
+  }
+
+//  ${DateFormat.E().format(DateTime.now())}
   Dialog dialogEdit(idtugas) => Dialog(
         child: Container(
           padding: const EdgeInsets.all(18),
-          height: 260,
+          height: 270,
           child: Column(
             children: [
               const Text(
@@ -102,12 +116,35 @@ class PekerjaanView extends GetView<PekerjaanController> {
                 style: TextStyle(fontSize: 18),
               ),
               const Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(4),
                 child: Divider(
                   thickness: 2,
                 ),
               ),
               const Expanded(child: SizedBox()),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Container(
+              //         margin: const EdgeInsets.only(bottom: 14),
+              //         padding: const EdgeInsets.symmetric(vertical: 14),
+              //         color: Colors.blue,
+              //         child: InkWell(
+              //           onTap: () {
+              //             controller.mengerjakan(idtugas);
+              //             Get.back();
+              //           },
+              //           child: const Center(
+              //             child: Text(
+              //               'Ulangi',
+              //               style: TextStyle(color: Colors.white),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // ),
               Row(
                 children: [
                   Expanded(
@@ -185,30 +222,45 @@ class PekerjaanView extends GetView<PekerjaanController> {
   Widget menambahPekerjaan(context) => Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          requesTanggal(context),
+          Obx(
+            () => controller.open.value == false
+                ? const SizedBox()
+                : requesTanggal(context),
+          ),
           Container(
             height: 75,
             alignment: Alignment.bottomCenter,
             color: Colors.blue[200],
             padding: const EdgeInsets.all(10),
-            child: TextField(
-              autofocus: false,
-              onChanged: (val) {
-                // ignore: avoid_print
-                print(val);
-              },
-              controller: controller.input,
-              decoration: InputDecoration(
-                  suffix: GestureDetector(
-                      onTap: () {
-                        if (controller.input.text != '') {
-                          controller.menambahkanPekerjan();
-                        }
-                      },
-                      child: const Icon(Icons.send)),
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: 'Tambah tugas'),
+            child: Row(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      controller.open.value = !controller.open.value;
+                    },
+                    icon: const Icon(Icons.more_vert_rounded)),
+                Expanded(
+                  child: TextField(
+                    autofocus: false,
+                    onChanged: (val) {
+                      // ignore: avoid_print
+                      print(val);
+                    },
+                    controller: controller.input,
+                    decoration: InputDecoration(
+                        suffix: GestureDetector(
+                            onTap: () {
+                              if (controller.input.text != '') {
+                                controller.menambahkanPekerjan();
+                              }
+                            },
+                            child: const Icon(Icons.send)),
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Tambah tugas'),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -224,7 +276,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
                   onTap: () {
                     controller.opsiTgl.value = 1;
                     controller.hariini.value = 'Tgl Hari Ini';
-                    controller.descripsi.value = 'Hari ini';
+                    controller.descripsi.value = 'Tgl :';
                     controller.waktuSekarang.value = DateTime.now();
                   },
                   child: Container(
@@ -250,7 +302,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
                   onTap: () {
                     controller.opsiTgl.value = 2;
                     controller.hariini.value = 'Tgl Order';
-                    controller.descripsi.value = 'Order hari ini';
+                    controller.descripsi.value = 'Order hari Tgl :';
                     controller.orderTime(context);
                   },
                   child: Container(
@@ -269,34 +321,34 @@ class PekerjaanView extends GetView<PekerjaanController> {
                   ),
                 )),
           ),
-          Expanded(
-            child: Obx(() => InkWell(
-                  onTap: () {
-                    controller.opsiTgl.value = 3;
-                    controller.hariini.value = 'Tgl Hari Ini';
-                    controller.descripsi.value = 'Berulang';
-                    controller.waktuSekarang.value = DateTime.now();
-                    showDialog(
-                        context: context, builder: (context) => dialogUlangi());
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 2, right: 4, bottom: 4),
-                    decoration: BoxDecoration(
-                        color: controller.opsiTgl.value == 3
-                            ? Colors.red
-                            : Colors.blue[200],
-                        borderRadius: BorderRadius.circular(4)),
-                    child: Center(
-                        child: Text(
-                      'Ulangi',
-                      style: TextStyle(
-                          color: controller.opsiTgl.value == 3
-                              ? Colors.white
-                              : Colors.black),
-                    )),
-                  ),
-                )),
-          )
+          // Expanded(
+          //   child: Obx(() => InkWell(
+          //         onTap: () {
+          //           controller.opsiTgl.value = 3;
+          //           controller.hariini.value = 'Tgl Hari Ini';
+          //           controller.descripsi.value = 'Berulang';
+          //           controller.waktuSekarang.value = DateTime.now();
+          //           showDialog(
+          //               context: context, builder: (context) => dialogUlangi());
+          //         },
+          //         child: Container(
+          //           margin: const EdgeInsets.only(left: 2, right: 4, bottom: 4),
+          //           decoration: BoxDecoration(
+          //               color: controller.opsiTgl.value == 3
+          //                   ? Colors.red
+          //                   : Colors.blue[200],
+          //               borderRadius: BorderRadius.circular(4)),
+          //           child: Center(
+          //               child: Text(
+          //             'Ulangi',
+          //             style: TextStyle(
+          //                 color: controller.opsiTgl.value == 3
+          //                     ? Colors.white
+          //                     : Colors.black),
+          //           )),
+          //         ),
+          //       )),
+          // )
         ],
       ),
     );

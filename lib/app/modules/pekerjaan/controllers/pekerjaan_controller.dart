@@ -9,9 +9,11 @@ class PekerjaanController extends GetxController {
 
   var argumen = Get.arguments;
   var hariini = 'Tgl Hari Ini'.obs;
-  var descripsi = 'sekali hari ini'.obs;
+  var descripsi = 'Tgl:'.obs;
 
   var waktuSekarang = DateTime.now().obs;
+
+  var open = false.obs;
 
   var senin = false.obs;
   var selasa = false.obs;
@@ -44,29 +46,29 @@ class PekerjaanController extends GetxController {
         sabtu.isTrue ||
         minggu.isTrue) {
       await FirebaseFirestroreku().documentTugas(argumen).then((value) {
-        List day = [];
+        List<DateTime> day = [];
 
         if (senin.isTrue) {
-          day.add(DateTime.monday);
+          day.add(DateTime.utc(99));
         }
-        if (selasa.isTrue) {
-          day.add(DateTime.tuesday);
-        }
-        if (rabu.isTrue) {
-          day.add(DateTime.wednesday);
-        }
-        if (kamis.isTrue) {
-          day.add(DateTime.thursday);
-        }
-        if (jumat.isTrue) {
-          day.add(DateTime.friday);
-        }
-        if (sabtu.isTrue) {
-          day.add(DateTime.saturday);
-        }
-        if (minggu.isTrue) {
-          day.add(DateTime.sunday);
-        }
+        // if (selasa.isTrue) {
+        //   day.add(DateTime.tuesday);
+        // }
+        // if (rabu.isTrue) {
+        //   day.add(DateTime.wednesday);
+        // }
+        // if (kamis.isTrue) {
+        //   day.add(DateTime.thursday);
+        // }
+        // if (jumat.isTrue) {
+        //   day.add(DateTime.friday);
+        // }
+        // if (sabtu.isTrue) {
+        //   day.add(DateTime.saturday);
+        // }
+        // if (minggu.isTrue) {
+        //   day.add(DateTime.sunday);
+        // }
         Map<String, dynamic> map = {
           'id': value.id,
           'name': input.text,
@@ -78,7 +80,7 @@ class PekerjaanController extends GetxController {
         };
 
         return FirebaseFirestroreku()
-            .menambahTugas(data: map, id: argumen, idtugas: value.id);
+            .menambahTugasulang(data: map, id: argumen, idtugas: value.id);
       });
       input.clear();
     } else {}

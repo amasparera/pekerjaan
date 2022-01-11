@@ -118,6 +118,15 @@ class FirebaseFirestroreku {
         .set(data);
   }
 
+  menambahTugasulang({id, idtugas, data}) {
+    FirebaseFirestore.instance
+        .collection('pekerjaan')
+        .doc(id)
+        .collection('ulang')
+        .doc(idtugas)
+        .set(data);
+  }
+
   mengerjakan({id, idtugas, namapekerja}) async {
     return FirebaseFirestore.instance
         .collection('pekerjaan')
