@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
+import 'package:clipboard/clipboard.dart';
 
 import 'package:pekerjaan/app/modules/home/controllers/home_controller.dart';
 import 'package:pekerjaan/app/routes/app_pages.dart';
@@ -36,7 +37,7 @@ class HomeView extends GetView<HomeController> {
         if (snapshot.hasError) {
           return const Text('Something went wrong');
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Loading");
+          return const LinearProgressIndicator();
         } else {
           List<CategoryModel> pekerjaan = snapshot.data!.docs
               .map((e) => CategoryModel.fromJson(e.data()))
@@ -178,7 +179,10 @@ class HomeView extends GetView<HomeController> {
           children: [
             Text('Angota - ${model.name}'),
             const SizedBox(height: 8),
-            Text('${model.idPekerjaan}'),
+            Text(
+              'ID - ${model.idPekerjaan}',
+              style: const TextStyle(color: Colors.blue),
+            ),
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Divider(
@@ -201,12 +205,17 @@ class HomeView extends GetView<HomeController> {
                 Expanded(
                   child: Container(
                     color: Colors.blue,
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(12),
                     child: InkWell(
-                      onTap: () async {},
+                      onTap: () async {
+                        FlutterClipboard.copy(model.idPekerjaan!).then((value) {
+                          Get.back();
+                          Get.snackbar('Berhasil Disalin', model.idPekerjaan!);
+                        });
+                      },
                       child: const Center(
                         child: Text(
-                          'salin Id',
+                          'Salin Id',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
@@ -221,7 +230,7 @@ class HomeView extends GetView<HomeController> {
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     color: Colors.blue,
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(12),
                     child: InkWell(
                       onTap: () async {
                         controller.tambahAnggota(model);
@@ -242,8 +251,7 @@ class HomeView extends GetView<HomeController> {
                 Expanded(
                   child: Container(
                     color: Colors.red,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 45, vertical: 10),
+                    padding: const EdgeInsets.all(12),
                     child: InkWell(
                       onTap: () {
                         controller.hapus(model.idPekerjaan);

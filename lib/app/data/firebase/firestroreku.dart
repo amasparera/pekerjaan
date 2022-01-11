@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
+import 'package:pekerjaan/app/data/model/model_pekerjaan.dart';
 import 'package:pekerjaan/app/data/model/myuser.dart';
 
 class FirebaseFirestroreku {
@@ -37,9 +38,19 @@ class FirebaseFirestroreku {
         .collection('pekerjaan')
         .doc(id)
         .collection('tugas')
-        .doc()
-        .delete();
-    // await FirebaseFirestore.instance.collection('pekerjaan').doc(id).delete();
+        .get()
+        .then((value) {
+      for (var element in value.docs) {
+        final data = PekerjaanModel.fromJson(element.data());
+        FirebaseFirestore.instance
+            .collection('pekerjaan')
+            .doc(id)
+            .collection('tugas')
+            .doc(data.id)
+            .delete();
+      }
+    });
+    await FirebaseFirestore.instance.collection('pekerjaan').doc(id).delete();
   }
 
   getUserModel(id) async {
@@ -76,7 +87,7 @@ class FirebaseFirestroreku {
   Future<CategoryModel?> gabung(id) async {
     await FirebaseFirestore.instance
         .collection('pekerjaan')
-        .doc(id)
+        .doc('wGg8Nz4p4IgSnYc9YU1V')
         .get()
         .then((value) {
       if (value.exists) {

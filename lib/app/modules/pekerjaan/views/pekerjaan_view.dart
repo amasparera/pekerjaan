@@ -79,7 +79,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
                             color: Colors.grey,
                             decoration: TextDecoration.lineThrough)),
                 subtitle: Text(
-                  '${pekerjaan[index].descripsi}',
+                  'Kapan : ${pekerjaan[index].descripsi}',
                   style: const TextStyle(fontStyle: FontStyle.italic),
                 ),
                 trailing: Text(pekerjaan[index].namePekerja!,
@@ -201,7 +201,9 @@ class PekerjaanView extends GetView<PekerjaanController> {
               decoration: InputDecoration(
                   suffix: GestureDetector(
                       onTap: () {
-                        controller.menambahkanPekerjan();
+                        if (controller.input.text != '') {
+                          controller.menambahkanPekerjan();
+                        }
                       },
                       child: const Icon(Icons.send)),
                   filled: true,

@@ -22,7 +22,7 @@ class PekerjaanController extends GetxController {
   var minggu = false.obs;
 
   void menambahkanPekerjan() async {
-    if (input.text != '' && opsiTgl.value != 3) {
+    if (opsiTgl.value != 3) {
       await FirebaseFirestroreku().documentTugas(argumen).then((value) {
         Map<String, dynamic> map = {
           'id': value.id,
@@ -36,7 +36,13 @@ class PekerjaanController extends GetxController {
             .menambahTugas(data: map, id: argumen, idtugas: value.id);
       });
       input.clear();
-    } else {
+    } else if (senin.isTrue ||
+        selasa.isTrue ||
+        rabu.isTrue ||
+        kamis.isTrue ||
+        jumat.isTrue ||
+        sabtu.isTrue ||
+        minggu.isTrue) {
       await FirebaseFirestroreku().documentTugas(argumen).then((value) {
         List day = [];
 
@@ -75,7 +81,7 @@ class PekerjaanController extends GetxController {
             .menambahTugas(data: map, id: argumen, idtugas: value.id);
       });
       input.clear();
-    }
+    } else {}
   }
 
   void orderTime(context) async {

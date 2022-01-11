@@ -7,7 +7,6 @@ class PekerjaanModel {
   String? namePekerja;
   Timestamp? hariIni;
   Timestamp? update;
-
   bool? status;
   List? day = [];
   PekerjaanModel(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/firebase/auth_google.dart';
@@ -21,15 +22,24 @@ class ProfileController extends GetxController {
 
   gabung() async {
     if (input.text != '') {
-      CategoryModel? model = await FirebaseFirestroreku().gabung(input.text);
-      if (model != null) {
-        List nama = model.namauser!;
-        nama.add(myUser.name);
-        List listid = model.idUser!;
-        listid.add(myUser.id);
-
-        FirebaseFirestroreku().tambahAnggota(input.text, listid, nama);
-      }
+      FirebaseFirestore.instance
+          .collection('pekerjaan')
+          .doc(input.text)
+          .get()
+          .then((value) {
+        final model = CategoryModel.fromJson(value.data());
+        if (!model.idUser!.contains(myUser.id)) {
+          List nama = model.namauser!;
+          nama.add(myUser.name);
+          List listid = model.idUser!;
+          listid.add(myUser.id);
+          FirebaseFirestroreku().tambahAnggota(input.text, listid, nama);
+          Get.back();
+          // }
+        } else {
+          masukaninput.value = 'Id salah atau anda tergabung';
+        }
+      });
     } else {
       masukaninput.value = 'masukan id';
     }
