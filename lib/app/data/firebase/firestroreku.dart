@@ -30,6 +30,7 @@ class FirebaseFirestroreku {
     data['idUser'] = [iduser];
     data['listnama'] = [listnama];
     data['id'] = resul.id;
+    data['admin'] = iduser;
     return resul.set(data);
   }
 
@@ -53,7 +54,7 @@ class FirebaseFirestroreku {
     await FirebaseFirestore.instance.collection('pekerjaan').doc(id).delete();
   }
 
-  getUserModel(id) async {
+  Future<UserModel?> getUserModel(id) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(id)
@@ -114,15 +115,6 @@ class FirebaseFirestroreku {
         .collection('pekerjaan')
         .doc(id)
         .collection('tugas')
-        .doc(idtugas)
-        .set(data);
-  }
-
-  menambahTugasulang({id, idtugas, data}) {
-    FirebaseFirestore.instance
-        .collection('pekerjaan')
-        .doc(id)
-        .collection('ulang')
         .doc(idtugas)
         .set(data);
   }

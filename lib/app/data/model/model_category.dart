@@ -3,6 +3,7 @@ class CategoryModel {
   String? idPekerjaan;
   List? idUser;
   List? namauser;
+  String? admin;
 
   CategoryModel(
       {required this.name,
@@ -15,6 +16,7 @@ class CategoryModel {
     idUser = json['idUser'];
     idPekerjaan = json['id'];
     namauser = json['listnama'];
+    admin = json['admin'];
   }
 
   Map<String, dynamic> toJson() {

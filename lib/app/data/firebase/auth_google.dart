@@ -39,7 +39,7 @@ class AuthUser {
           'name': user.displayName,
           'userid': user.uid,
           'profileUrl': user.photoURL,
-          'username': user.email!.replaceAll('@gmail.com', '')
+          'username': user.email!.replaceAll('@gmail.com', ''),
         };
 
         FirebaseFirestroreku()

@@ -103,7 +103,7 @@ class HomeView extends GetView<HomeController> {
               icon: const Icon(
                 Icons.person,
                 color: Colors.white,
-              ))
+              )),
         ],
       ),
     );
@@ -200,74 +200,82 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: Colors.blue,
-                    padding: const EdgeInsets.all(12),
-                    child: InkWell(
-                      onTap: () async {
-                        FlutterClipboard.copy(model.idPekerjaan!).then((value) {
-                          Get.back();
-                          Get.snackbar('Berhasil Disalin', model.idPekerjaan!);
-                        });
-                      },
-                      child: const Center(
-                        child: Text(
-                          'Salin Id',
-                          style: TextStyle(color: Colors.white),
+            model.admin == controller.userIdSaya
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          color: Colors.blue,
+                          padding: const EdgeInsets.all(12),
+                          child: InkWell(
+                            onTap: () async {
+                              FlutterClipboard.copy(model.idPekerjaan!)
+                                  .then((value) {
+                                Get.back();
+                                Get.snackbar(
+                                    'Berhasil Disalin', model.idPekerjaan!);
+                              });
+                            },
+                            child: const Center(
+                              child: Text(
+                                'Salin Id',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    color: Colors.blue,
-                    padding: const EdgeInsets.all(12),
-                    child: InkWell(
-                      onTap: () async {
-                        controller.tambahAnggota(model);
-                      },
-                      child: const Center(
-                        child: Text(
-                          'Tambahkan Angota',
-                          style: TextStyle(color: Colors.white),
+                    ],
+                  )
+                : const SizedBox(),
+            model.admin == controller.userIdSaya
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          color: Colors.blue,
+                          padding: const EdgeInsets.all(12),
+                          child: InkWell(
+                            onTap: () async {
+                              controller.tambahAnggota(model);
+                            },
+                            child: const Center(
+                              child: Text(
+                                'Tambahkan Angota',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: Colors.red,
-                    padding: const EdgeInsets.all(12),
-                    child: InkWell(
-                      onTap: () {
-                        controller.hapus(model.idPekerjaan);
-                        Get.back();
-                      },
-                      child: const Center(
-                        child: Text(
-                          'hapus',
-                          style: TextStyle(color: Colors.white),
+                    ],
+                  )
+                : const SizedBox(),
+            model.admin == controller.userIdSaya
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          color: Colors.red,
+                          padding: const EdgeInsets.all(12),
+                          child: InkWell(
+                            onTap: () {
+                              controller.hapus(model.idPekerjaan);
+                              Get.back();
+                            },
+                            child: const Center(
+                              child: Text(
+                                'hapus',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                    ],
+                  )
+                : const SizedBox(),
           ],
         ),
       ),

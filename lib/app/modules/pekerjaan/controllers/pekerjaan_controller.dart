@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/firebase/firestroreku.dart';
 import 'package:pekerjaan/app/data/getstore/myuser.dart';
+import 'package:pekerjaan/app/data/hive/hive_update.dart';
 
 class PekerjaanController extends GetxController {
   TextEditingController input = TextEditingController();
@@ -49,38 +50,52 @@ class PekerjaanController extends GetxController {
         List<DateTime> day = [];
 
         if (senin.isTrue) {
-          day.add(DateTime.utc(99));
+          day.add(DateTime.utc(2022, 1, 10));
         }
-        // if (selasa.isTrue) {
-        //   day.add(DateTime.tuesday);
-        // }
-        // if (rabu.isTrue) {
-        //   day.add(DateTime.wednesday);
-        // }
-        // if (kamis.isTrue) {
-        //   day.add(DateTime.thursday);
-        // }
-        // if (jumat.isTrue) {
-        //   day.add(DateTime.friday);
-        // }
-        // if (sabtu.isTrue) {
-        //   day.add(DateTime.saturday);
-        // }
-        // if (minggu.isTrue) {
-        //   day.add(DateTime.sunday);
-        // }
+        if (selasa.isTrue) {
+          day.add(DateTime.utc(2022, 1, 11));
+        }
+        if (rabu.isTrue) {
+          day.add(DateTime.utc(2022, 1, 12));
+        }
+        if (kamis.isTrue) {
+          day.add(DateTime.utc(2022, 1, 13));
+        }
+        if (jumat.isTrue) {
+          day.add(DateTime.utc(2022, 1, 14));
+        }
+        if (sabtu.isTrue) {
+          day.add(DateTime.utc(2022, 1, 15));
+        }
+        if (minggu.isTrue) {
+          day.add(DateTime.utc(2022, 1, 16));
+        }
         Map<String, dynamic> map = {
           'id': value.id,
           'name': input.text,
           'status': false,
           'namapekerja': '',
           'descripsi': descripsi.value,
-          'update': waktuSekarang.value,
-          'day': day
+          'hariini': waktuSekarang.value
         };
 
+        Update().menambahUlangi(
+          argumen,
+          map,
+          day,
+        );
+        senin.value = false;
+        selasa.value = false;
+        rabu.value = false;
+        kamis.value = false;
+        jumat.value = false;
+        sabtu.value = false;
+        minggu.value = false;
+
+        opsiTgl.value = 1;
+
         return FirebaseFirestroreku()
-            .menambahTugasulang(data: map, id: argumen, idtugas: value.id);
+            .menambahTugas(data: map, id: argumen, idtugas: value.id);
       });
       input.clear();
     } else {}

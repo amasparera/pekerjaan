@@ -14,7 +14,9 @@ class PekerjaanModel {
       {required this.id,
       required this.name,
       required this.status,
-      required this.namePekerja});
+      required this.namePekerja,
+      required this.descripsi,
+      required this.hariIni});
 
   PekerjaanModel.fromJson(
     json,

@@ -7,6 +7,7 @@ class Myuser {
   static String displayNameKEY = 'userdisplaykey';
   static String userEmailKEY = 'useremailkey';
   static String userProfilePicKEY = 'userprofilepickey';
+  static String admin = 'admin';
 
   // save getstorage
   final GetStorage _box = GetStorage();
