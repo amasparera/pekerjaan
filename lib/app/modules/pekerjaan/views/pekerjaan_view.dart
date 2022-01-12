@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:pekerjaan/app/data/model/model_pekerjaan.dart';
 
 import '../controllers/pekerjaan_controller.dart';
@@ -92,7 +93,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
               style: const TextStyle(
                   color: Colors.grey, decoration: TextDecoration.lineThrough)),
       subtitle: Text(
-        '${pekerjaan[index].descripsi} ${pekerjaan[index].hariIni!.day}',
+        '${pekerjaan[index].descripsi} ${DateFormat.MMMd().format(pekerjaan[index].hariIni!)}',
         style: const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
       ),
       trailing: Text(pekerjaan[index].namePekerja!,
@@ -141,47 +142,45 @@ class PekerjaanView extends GetView<PekerjaanController> {
                   )
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        color: Colors.blue,
-                        child: InkWell(
-                          onTap: () {
-                            controller.belumDikerjakan(idtugas);
-                            Get.back();
-                          },
-                          child: const Center(
-                            child: Text(
-                              'Belum Dikerjakan',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Container(
+              //         margin: const EdgeInsets.symmetric(vertical: 10),
+              //         padding: const EdgeInsets.symmetric(vertical: 14),
+              //         color: Colors.blue,
+              //         child: InkWell(
+              //           onTap: () {
+              //             showDialog(
+              //                 context: context,
+              //                 builder: (context) => dialogUlangi());
+              //           },
+              //           child: const Center(
+              //             child: Text(
+              //               'Ulangi',
+              //               style: TextStyle(color: Colors.white),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // ),
               Row(
                 children: [
                   Expanded(
                     child: Container(
-                      margin: const EdgeInsets.only(bottom: 14),
+                      margin: const EdgeInsets.only(bottom: 10, top: 10),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       color: Colors.blue,
                       child: InkWell(
                         onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) => dialogUlangi());
+                          controller.belumDikerjakan(idtugas);
+                          Get.back();
                         },
                         child: const Center(
                           child: Text(
-                            'Ulangi',
+                            'Belum Dikerjakan',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -430,9 +429,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
                 margin: const EdgeInsets.all(2),
                 color: Colors.blue,
                 child: InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
+                  onTap: () {},
                   child: const Center(
                     child: Text(
                       'Simpan',
