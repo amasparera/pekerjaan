@@ -9,7 +9,7 @@ class PekerjaanModel {
   // DateTime? update;
   bool? status;
 
-  // List? day = [];
+  List? day = [];
   PekerjaanModel(
       {required this.id,
       required this.name,
@@ -24,7 +24,7 @@ class PekerjaanModel {
     namePekerja = json['namapekerja'];
     status = json['status'];
     name = json['name'];
-    // day = json['day'];
+    day = json['day'];
     id = json['id'];
     descripsi = json['descripsi'];
     hariIni = (json['hariini'] as Timestamp).toDate();

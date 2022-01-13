@@ -48,27 +48,35 @@ class PekerjaanController extends GetxController {
         minggu.isTrue) {
       await FirebaseFirestroreku().documentTugas(argumen).then((value) {
         List<DateTime> day = [];
+        List ulangi = [];
 
         if (senin.isTrue) {
           day.add(DateTime.utc(2022, 1, 10));
+          ulangi.add('senin');
         }
         if (selasa.isTrue) {
           day.add(DateTime.utc(2022, 1, 11));
+          ulangi.add('selasa');
         }
         if (rabu.isTrue) {
           day.add(DateTime.utc(2022, 1, 12));
+          ulangi.add('rabu');
         }
         if (kamis.isTrue) {
           day.add(DateTime.utc(2022, 1, 13));
+          ulangi.add('kamis');
         }
         if (jumat.isTrue) {
           day.add(DateTime.utc(2022, 1, 14));
+          ulangi.add('jum\'at');
         }
         if (sabtu.isTrue) {
           day.add(DateTime.utc(2022, 1, 15));
+          ulangi.add('sabtu');
         }
         if (minggu.isTrue) {
           day.add(DateTime.utc(2022, 1, 16));
+          ulangi.add('minggu');
         }
         Map<String, dynamic> map = {
           'id': value.id,
@@ -76,7 +84,8 @@ class PekerjaanController extends GetxController {
           'status': false,
           'namapekerja': '',
           'descripsi': descripsi.value,
-          'hariini': waktuSekarang.value
+          'hariini': waktuSekarang.value,
+          'day': ulangi,
         };
 
         Update().menambahUlangi(
@@ -94,8 +103,9 @@ class PekerjaanController extends GetxController {
 
         opsiTgl.value = 1;
 
-        return FirebaseFirestroreku()
+        FirebaseFirestroreku()
             .menambahTugas(data: map, id: argumen, idtugas: value.id);
+        ulangi.clear();
       });
       input.clear();
     } else {}

@@ -77,7 +77,8 @@ class PekerjaanView extends GetView<PekerjaanController> {
       onLongPress: () {
         showDialog(
             context: context,
-            builder: (context) => dialogEdit(pekerjaan[index].id, context));
+            builder: (context) =>
+                dialogEdit(pekerjaan[index].id, context, pekerjaan[index].day));
       },
       onTap: () {
         if (pekerjaan[index].status == false) {
@@ -103,7 +104,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
   }
 
 //  ${DateFormat.E().format(DateTime.now())}
-  Dialog dialogEdit(idtugas, context) => Dialog(
+  Dialog dialogEdit(idtugas, context, listday) => Dialog(
         child: Container(
           padding: const EdgeInsets.all(12),
           height: 340,
@@ -119,7 +120,21 @@ class PekerjaanView extends GetView<PekerjaanController> {
                   thickness: 2,
                 ),
               ),
-              const Expanded(child: Text('Terulang setiap :')),
+              Expanded(
+                  child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      'Terulang setiap :',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  listday != null
+                      ? Expanded(child: Text(listday.toString()))
+                      : const SizedBox()
+                ],
+              )),
               Row(
                 children: [
                   Expanded(
@@ -429,7 +444,9 @@ class PekerjaanView extends GetView<PekerjaanController> {
                 margin: const EdgeInsets.all(2),
                 color: Colors.blue,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Get.back();
+                  },
                   child: const Center(
                     child: Text(
                       'Simpan',
