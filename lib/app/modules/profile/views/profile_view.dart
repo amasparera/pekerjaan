@@ -8,6 +8,7 @@ import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({Key? key}) : super(key: key);
+  final String text = 'Sign in With Google';
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class ProfileView extends GetView<ProfileController> {
                     borderRadius: BorderRadius.circular(6),
                     color: Colors.black54),
                 height: 40,
-                width: 34,
+                width: 32,
                 child: const Icon(Icons.arrow_back_ios_new_rounded)),
             onPressed: () {
               Get.back();
@@ -54,8 +55,8 @@ class ProfileView extends GetView<ProfileController> {
               decoration: const BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.cover,
-                    image:
-                        AssetImage('assest/mio-ito-B_SLtmXPKNA-unsplash.jpg')),
+                    image: AssetImage(
+                        'assest/campaign-creators-gMsnXqILjp4-unsplash.jpg')),
               ),
               child: Container(
                 width: MediaQuery.of(context).size.width,

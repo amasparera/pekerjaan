@@ -22,7 +22,7 @@ void main() async {
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Pekerjaan",
-      initialRoute: AppPages.INITIAL(),
+      initialRoute: Routes.ONBOARD,
       getPages: AppPages.routes,
     ),
   );

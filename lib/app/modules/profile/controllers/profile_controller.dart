@@ -51,6 +51,7 @@ class ProfileController extends GetxController {
     AuthUser().signOut();
   }
 
+  static const String subText = 'Sign in With Google';
   @override
   void onInit() async {
     await iniUser();

@@ -45,6 +45,7 @@ class HomeView extends GetView<HomeController> {
               .map((e) => CategoryModel.fromJson(e.data()))
               .toList();
           controller.total = pekerjaan.length;
+          pekerjaan.sort((a, b) => a.name!.compareTo(b.name!));
 
           return ListView.builder(
             padding:

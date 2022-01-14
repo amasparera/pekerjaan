@@ -40,6 +40,7 @@ class SeacrhController extends GetxController {
       FirebaseFirestroreku().tambahAnggota(argumen.idPekerjaan, listid, nama);
       Get.back();
       Get.back();
+      Get.snackbar('Berhasil', 'Berhasil menambahakan ${model.name}');
     } else {
       Get.back();
       Get.back();
