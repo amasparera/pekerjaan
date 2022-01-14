@@ -12,31 +12,20 @@ class PekerjaanView extends GetView<PekerjaanController> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: AppBar(
-            elevation: 0,
-            title: const Text('Semua Pekerjaan'),
-            actions: [
-              Center(
-                  child: Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Obx(() => Text(
-                    '${controller.hariini.value} ${controller.waktuSekarang.value.day}.')),
-              ))
-            ],
-          ),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50),
+        child: AppBar(
+          elevation: 0,
+          title: const Text('Semua Pekerjaan'),
         ),
-        body: Stack(
-          children: [
-            body(),
-            menambahPekerjaan(context),
-          ],
-        ),
+      ),
+      body: Stack(
+        children: [
+          body(),
+          menambahPekerjaan(context),
+        ],
       ),
     );
   }
@@ -94,7 +83,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
               style: const TextStyle(
                   color: Colors.grey, decoration: TextDecoration.lineThrough)),
       subtitle: Text(
-        '${pekerjaan[index].descripsi} ${DateFormat.MMMd().format(pekerjaan[index].hariIni!)}',
+        DateFormat.MMMd().format(pekerjaan[index].hariIni!),
         style: const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
       ),
       trailing: Text(pekerjaan[index].namePekerja!,
@@ -107,7 +96,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
   Dialog dialogEdit(idtugas, context, listday) => Dialog(
         child: Container(
           padding: const EdgeInsets.all(12),
-          height: 340,
+          height: 200,
           child: Column(
             children: [
               const Text(
@@ -120,67 +109,6 @@ class PekerjaanView extends GetView<PekerjaanController> {
                   thickness: 2,
                 ),
               ),
-              Expanded(
-                  child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      'Terulang setiap :',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  listday != null
-                      ? Expanded(child: Text(listday.toString()))
-                      : const SizedBox()
-                ],
-              )),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      color: Colors.blue,
-                      child: InkWell(
-                        onTap: () {
-                          controller.mengerjakan(idtugas);
-                          Get.back();
-                        },
-                        child: const Center(
-                          child: Text(
-                            'Ganti Saya',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: Container(
-              //         margin: const EdgeInsets.symmetric(vertical: 10),
-              //         padding: const EdgeInsets.symmetric(vertical: 14),
-              //         color: Colors.blue,
-              //         child: InkWell(
-              //           onTap: () {
-              //             showDialog(
-              //                 context: context,
-              //                 builder: (context) => dialogUlangi());
-              //           },
-              //           child: const Center(
-              //             child: Text(
-              //               'Ulangi',
-              //               style: TextStyle(color: Colors.white),
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     )
-              //   ],
-              // ),
               Row(
                 children: [
                   Expanded(

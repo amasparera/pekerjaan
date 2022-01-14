@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "905675226429",
-    "project_id": "pekerjaan-9d0ac",
-    "storage_bucket": "pekerjaan-9d0ac.appspot.com"
+    "project_number": "916007201814",
+    "project_id": "serabutan-2aa27",
+    "storage_bucket": "serabutan-2aa27.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:905675226429:android:63eca6109e4ee723a99954",
+        "mobilesdk_app_id": "1:916007201814:android:25f68f379d19de0277d937",
         "android_client_info": {
           "package_name": "com.example.pekerjaan"
         }
       },
       "oauth_client": [
         {
-          "client_id": "905675226429-1j8e1cmbdp124sips9984td13cuht2rb.apps.googleusercontent.com",
+          "client_id": "916007201814-g3dbgi8q1pf7nfhuh1aka5lusc7u9ghp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAyvDr031ROzf_gAHG8wXzZZw4axxU6bGE"
+          "current_key": "AIzaSyC9EwAOW4jxYZFyui7GdO1yxb8PDPV0W7E"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "905675226429-1j8e1cmbdp124sips9984td13cuht2rb.apps.googleusercontent.com",
+              "client_id": "916007201814-g3dbgi8q1pf7nfhuh1aka5lusc7u9ghp.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

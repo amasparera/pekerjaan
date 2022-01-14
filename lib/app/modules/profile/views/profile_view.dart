@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -11,111 +12,211 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('ProfileView'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textTile('Nama :', controller.myUser.name),
-            textTile('Username :', controller.myUser.username),
-            textTile('Email :', controller.myUser.email),
-            textTile('User ID :', controller.myUser.id),
-            const SizedBox(height: 24),
-            buildQr(context),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) => dialogGabung());
-                    },
-                    child: const Text(' Gabung ')),
-                ElevatedButton(
-                    onPressed: () {
-                      controller.logOut();
-                    },
-                    child: const Text('Log Out')),
-              ],
-            )
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            splashRadius: 24,
+            icon: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Colors.black54),
+                height: 40,
+                width: 34,
+                child: const Icon(Icons.arrow_back_ios_new_rounded)),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+          actions: [
+            IconButton(
+              splashRadius: 24,
+              icon: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: Colors.black54,
+                ),
+                height: 40,
+                width: 40,
+                child: const Icon(Icons.logout),
+              ),
+              onPressed: () {
+                controller.logOut();
+              },
+            ),
           ],
         ),
-      ),
-    );
-  }
-
-  Dialog dialogGabung() => Dialog(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          height: 130,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              TextField(
-                controller: controller.input,
-                decoration: const InputDecoration(hintText: 'input id'),
+        body: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image:
+                        AssetImage('assest/mio-ito-B_SLtmXPKNA-unsplash.jpg')),
               ),
-              Row(
-                children: [
-                  Obx(() => Text(
-                        '${controller.masukaninput}',
-                        style: const TextStyle(color: Colors.red),
-                      )),
-                  const Spacer(),
-                  ElevatedButton(
-                      onPressed: () {
-                        controller.gabung();
-                      },
-                      child: const Text('Simpan')),
-                ],
-              )
-            ],
-          ),
-        ),
-      );
-
-  Widget textTile(nama, usernama) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            nama,
-            style: const TextStyle(fontSize: 14),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Text(
-            usernama,
-            style: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
-          )
-        ],
-      ),
-    );
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [Colors.black87, Colors.black12],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height * .7,
+                      alignment: Alignment.bottomCenter,
+                      child: Column(
+                        children: [
+                          FadeInLeft(
+                            animate: true,
+                            delay: const Duration(milliseconds: 180),
+                            duration: const Duration(milliseconds: 200),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 80,
+                              child: CircleAvatar(
+                                radius: 77,
+                                backgroundImage:
+                                    NetworkImage(controller.myUser.profileUrl!),
+                              ),
+                            ),
+                          ),
+                          FadeInLeft(
+                            animate: true,
+                            delay: const Duration(microseconds: 170),
+                            duration: const Duration(milliseconds: 200),
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 14),
+                              child: Text(controller.myUser.name!.toUpperCase(),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          ),
+                          Expanded(
+                            child: FadeInUp(
+                              animate: true,
+                              duration: const Duration(milliseconds: 200),
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.all(28),
+                                    decoration: BoxDecoration(
+                                        color: Colors.black38,
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(38),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Email :',
+                                          style:
+                                              TextStyle(color: Colors.white54),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8, top: 2, bottom: 2),
+                                          child: Text(controller.myUser.email!,
+                                              style: const TextStyle(
+                                                  color: Colors.white70,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        const Text(
+                                          'User ID :',
+                                          style:
+                                              TextStyle(color: Colors.white54),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8, top: 2, bottom: 2),
+                                          child: Text(controller.myUser.id!,
+                                              style: const TextStyle(
+                                                  color: Colors.white70,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Expanded(
+                                            child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const Text(
+                                                  'Total Pekerjaan :',
+                                                  style: TextStyle(
+                                                      color: Colors.white54),
+                                                ),
+                                                const SizedBox(height: 5),
+                                                TweenAnimationBuilder(
+                                                    duration: const Duration(
+                                                        milliseconds: 900),
+                                                    tween: IntTween(
+                                                        begin: 0,
+                                                        end:
+                                                            controller.argumen),
+                                                    builder: (context, value,
+                                                        child) {
+                                                      return Text(
+                                                        value.toString(),
+                                                        style: const TextStyle(
+                                                            color: Colors.amber,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 40),
+                                                      );
+                                                    })
+                                              ],
+                                            )),
+                                            Padding(
+                                              padding: const EdgeInsets.all(18),
+                                              child: buildQr(context),
+                                            ),
+                                          ],
+                                        ))
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget buildQr(context) {
     return Center(
       child: Container(
         padding: const EdgeInsets.all(10),
-        height: MediaQuery.of(context).size.width * .7,
-        width: MediaQuery.of(context).size.width * .7,
         decoration:
-            BoxDecoration(border: Border.all(width: 5, color: Colors.black)),
-        child: QrImage(data: controller.myUser.id!),
+            BoxDecoration(border: Border.all(width: 5, color: Colors.white)),
+        child: QrImage(
+          data: controller.myUser.id!,
+          backgroundColor: Colors.white,
+        ),
       ),
     );
   }

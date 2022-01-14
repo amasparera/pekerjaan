@@ -1,9 +1,8 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
-import 'package:clipboard/clipboard.dart';
-
 import 'package:pekerjaan/app/modules/home/controllers/home_controller.dart';
 import 'package:pekerjaan/app/routes/app_pages.dart';
 
@@ -18,7 +17,10 @@ class HomeView extends GetView<HomeController> {
         elevation: 0,
         title: const Text('Kategori Pekerjaan'),
       ),
-      bottomNavigationBar: bottomAdd(context),
+      bottomNavigationBar: FadeInUp(
+          animate: true,
+          duration: const Duration(microseconds: 500),
+          child: bottomAdd(context)),
       body: listKategory(),
 
       //create appBar
@@ -42,28 +44,34 @@ class HomeView extends GetView<HomeController> {
           List<CategoryModel> pekerjaan = snapshot.data!.docs
               .map((e) => CategoryModel.fromJson(e.data()))
               .toList();
+          controller.total = pekerjaan.length;
 
           return ListView.builder(
             padding:
-                const EdgeInsets.only(bottom: 50, right: 2, left: 2, top: 2),
+                const EdgeInsets.only(bottom: 4, right: 2, left: 2, top: 2),
             itemCount: pekerjaan.length,
             itemBuilder: (context, index) {
-              return Container(
-                margin: const EdgeInsets.all(4),
-                color: Colors.white,
-                child: ListTile(
-                  onLongPress: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => edit(context, pekerjaan[index]));
-                  },
-                  onTap: () =>
-                      controller.toPekerjaan(pekerjaan[index].idPekerjaan),
-                  title: Text(
-                    pekerjaan[index].name!,
-                    style: const TextStyle(fontSize: 20, color: Colors.blue),
+              return FadeInRightBig(
+                duration: const Duration(milliseconds: 700),
+                delay: Duration(milliseconds: (index + 1) * 40),
+                child: Container(
+                  margin: const EdgeInsets.all(4),
+                  color: Colors.white,
+                  child: ListTile(
+                    onLongPress: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) =>
+                              edit(context, pekerjaan[index]));
+                    },
+                    onTap: () =>
+                        controller.toPekerjaan(pekerjaan[index].idPekerjaan),
+                    title: Text(
+                      pekerjaan[index].name!,
+                      style: const TextStyle(fontSize: 20, color: Colors.blue),
+                    ),
+                    leading: const Icon(Icons.work),
                   ),
-                  leading: const Icon(Icons.work),
                 ),
               );
             },
@@ -98,11 +106,10 @@ class HomeView extends GetView<HomeController> {
           IconButton(
               splashRadius: 15,
               onPressed: () {
-                Get.toNamed(Routes.PROFILE);
+                Get.toNamed(Routes.PROFILE, arguments: controller.total);
               },
-              icon: const Icon(
-                Icons.person,
-                color: Colors.white,
+              icon: CircleAvatar(
+                backgroundImage: NetworkImage(controller.profileurl),
               )),
         ],
       ),
@@ -130,17 +137,20 @@ class HomeView extends GetView<HomeController> {
               children: [
                 Expanded(
                   child: Container(
-                      padding: const EdgeInsets.all(10),
-                      color: Colors.red,
-                      child: InkWell(
-                          onTap: () {
-                            controller.batal();
-                          },
-                          child: const Center(
-                              child: Text(
-                            'Batal',
-                            style: TextStyle(color: Colors.white),
-                          )))),
+                    padding: const EdgeInsets.all(10),
+                    color: Colors.red,
+                    child: InkWell(
+                      onTap: () {
+                        controller.batal();
+                      },
+                      child: const Center(
+                        child: Text(
+                          'Batal',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   width: 8,
@@ -191,43 +201,14 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                itemCount: model.idUser!.length,
-                itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.all(2),
-                  child: Text('${index + 1}. ${model.namauser![index]}'),
-                ),
+                child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              itemCount: model.idUser!.length,
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.all(2),
+                child: Text('${index + 1}. ${model.namauser![index]}'),
               ),
-            ),
-            model.admin == controller.userIdSaya
-                ? Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          color: Colors.blue,
-                          padding: const EdgeInsets.all(12),
-                          child: InkWell(
-                            onTap: () async {
-                              FlutterClipboard.copy(model.idPekerjaan!)
-                                  .then((value) {
-                                Get.back();
-                                Get.snackbar(
-                                    'Berhasil Disalin', model.idPekerjaan!);
-                              });
-                            },
-                            child: const Center(
-                              child: Text(
-                                'Salin Id',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : const SizedBox(),
+            )),
             model.admin == controller.userIdSaya
                 ? Row(
                     children: [
@@ -237,8 +218,8 @@ class HomeView extends GetView<HomeController> {
                           color: Colors.blue,
                           padding: const EdgeInsets.all(12),
                           child: InkWell(
-                            onTap: () async {
-                              controller.tambahAnggota(model);
+                            onTap: () {
+                              Get.toNamed(Routes.SEACRH, arguments: model);
                             },
                             child: const Center(
                               child: Text(

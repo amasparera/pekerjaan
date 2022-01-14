@@ -11,6 +11,7 @@ class ProfileController extends GetxController {
   TextEditingController input = TextEditingController();
   UserModel myUser = UserModel();
   var masukaninput = ''.obs;
+  var argumen = Get.arguments;
 
   iniUser() {
     Myuser ini = Myuser();
@@ -18,6 +19,7 @@ class ProfileController extends GetxController {
     myUser.id = ini.loadUserId();
     myUser.name = ini.loadDisplayName();
     myUser.username = ini.loadUserName();
+    myUser.profileUrl = ini.loadPRofilePic();
   }
 
   gabung() async {

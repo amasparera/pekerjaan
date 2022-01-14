@@ -11,6 +11,8 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   // ignore: constant_identifier_names
   static const PROFILE = _Paths.PROFILE;
+  // ignore: constant_identifier_names
+  static const SEACRH = _Paths.SEACRH;
 }
 
 abstract class _Paths {
@@ -23,4 +25,6 @@ abstract class _Paths {
   static const LOGIN = '/login';
   // ignore: constant_identifier_names
   static const PROFILE = '/profile';
+  // ignore: constant_identifier_names
+  static const SEACRH = '/seacrh';
 }

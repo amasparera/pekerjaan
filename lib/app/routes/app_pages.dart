@@ -1,15 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-import 'package:pekerjaan/app/modules/profile/bindings/profile_binding.dart';
-import 'package:pekerjaan/app/modules/profile/views/profile_view.dart';
-
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/pekerjaan/bindings/pekerjaan_binding.dart';
 import '../modules/pekerjaan/views/pekerjaan_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/profile_view.dart';
+import '../modules/seacrh/bindings/seacrh_binding.dart';
+import '../modules/seacrh/views/seacrh_view.dart';
 
 part 'app_routes.dart';
 
@@ -40,9 +41,14 @@ class AppPages {
       binding: LoginBinding(),
     ),
     GetPage(
-      name: _Paths.PROFILE,
-      page: () => const ProfileView(),
-      binding: ProfileBinding(),
+        name: _Paths.PROFILE,
+        page: () => const ProfileView(),
+        binding: ProfileBinding(),
+        transition: Transition.fadeIn),
+    GetPage(
+      name: _Paths.SEACRH,
+      page: () => const SeacrhView(),
+      binding: SeacrhBinding(),
     ),
   ];
 }
