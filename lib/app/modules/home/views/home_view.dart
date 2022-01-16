@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
 import 'package:pekerjaan/app/modules/home/controllers/home_controller.dart';
 import 'package:pekerjaan/app/routes/app_pages.dart';
+import 'package:glass/glass.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
@@ -12,18 +13,77 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[50],
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('Kategori Pekerjaan'),
+      backgroundColor: const Color(0xff17182D),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xffFF6600),
+        onPressed: () {
+          showDialog(context: context, builder: (contex) => dialog(contex));
+        },
+        child: const Icon(Icons.add_business_rounded),
       ),
-      bottomNavigationBar: FadeInUp(
-          animate: true,
-          duration: const Duration(microseconds: 500),
-          child: bottomAdd(context)),
-      body: listKategory(),
+      body: SafeArea(
+          child: Column(
+        children: [
+          appbar(),
+          Expanded(child: listKategory()),
+        ],
+      )),
 
       //create appBar
+    );
+  }
+
+  Widget appbar() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: FadeInLeftBig(
+              duration: const Duration(seconds: 1),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: const BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 8, spreadRadius: 1, color: Colors.white12)
+                    ],
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(40),
+                        topRight: Radius.circular(40))),
+                child: Image.asset(
+                  'assest/logo a.png',
+                  height: 30,
+                ),
+              ).asGlass(
+                tintColor: Colors.transparent,
+                clipBorderRadius: const BorderRadius.only(
+                    bottomRight: Radius.circular(40),
+                    topRight: Radius.circular(40)),
+              ),
+            ),
+          ),
+          FadeInRightBig(
+            duration: const Duration(seconds: 1),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12, right: 12),
+              child: IconButton(
+                  padding: EdgeInsets.zero,
+                  splashRadius: 29,
+                  onPressed: () {
+                    Get.toNamed(Routes.PROFILE, arguments: controller.total);
+                  },
+                  icon: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: NetworkImage(controller.profileurl))),
+                  )),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -49,7 +109,7 @@ class HomeView extends GetView<HomeController> {
 
           return ListView.builder(
             padding:
-                const EdgeInsets.only(bottom: 4, right: 2, left: 2, top: 2),
+                const EdgeInsets.only(bottom: 4, right: 2, left: 2, top: 12),
             itemCount: pekerjaan.length,
             itemBuilder: (context, index) {
               return FadeInRightBig(
@@ -79,41 +139,6 @@ class HomeView extends GetView<HomeController> {
           );
         }
       },
-    );
-  }
-
-  Container bottomAdd(context) {
-    return Container(
-      padding: const EdgeInsets.only(right: 12),
-      height: 50,
-      color: Colors.blue,
-      child: Row(
-        children: [
-          MaterialButton(
-            onPressed: () {
-              showDialog(context: context, builder: (contex) => dialog(contex));
-            },
-            child: Row(
-              children: const [
-                Icon(Icons.add, color: Colors.white),
-                Text(
-                  'Tambah pekerjaan',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-          const Spacer(),
-          IconButton(
-              splashRadius: 15,
-              onPressed: () {
-                Get.toNamed(Routes.PROFILE, arguments: controller.total);
-              },
-              icon: CircleAvatar(
-                backgroundImage: NetworkImage(controller.profileurl),
-              )),
-        ],
-      ),
     );
   }
 

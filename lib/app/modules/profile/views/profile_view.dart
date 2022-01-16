@@ -55,8 +55,8 @@ class ProfileView extends GetView<ProfileController> {
               decoration: const BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage(
-                        'assest/campaign-creators-gMsnXqILjp4-unsplash.jpg')),
+                    image:
+                        AssetImage('assest/campaign-creators-gMsnXqILjp4.jpg')),
               ),
               child: Container(
                 width: MediaQuery.of(context).size.width,

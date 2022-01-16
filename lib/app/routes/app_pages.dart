@@ -23,7 +23,7 @@ class AppPages {
   static String? INITIAL() {
     // AuthUser().signOut();
     User? auth = FirebaseAuth.instance.currentUser;
-    return (auth == null) ? Routes.LOGIN : Routes.HOME;
+    return (auth == null) ? Routes.ONBOARD : Routes.HOME;
   }
 
   static final routes = [

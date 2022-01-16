@@ -25,7 +25,8 @@ dependencies:
   hive: ^2.0.5
   hive_flutter: ^1.1.0
   path_provider: ^2.0.8
-  animate_do: ^2.1.0
+  animate_do: ^2.1.0 
+  glass: ^1.0.1+1
   
   
   

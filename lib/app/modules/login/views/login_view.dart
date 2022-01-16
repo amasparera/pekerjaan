@@ -15,7 +15,7 @@ class LoginView extends GetView<LoginController> {
           clipBehavior: Clip.hardEdge,
           decoration: const BoxDecoration(),
           child: Image.asset(
-            'assest/campaign-creators-gMsnXqILjp4-unsplash.jpg',
+            'assest/campaign-creators-gMsnXqILjp4.jpg',
             fit: BoxFit.cover,
           ),
         ),
@@ -52,32 +52,42 @@ class LoginView extends GetView<LoginController> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                MaterialButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  onPressed: () {
-                    controller.login();
-                  },
-                  color: Colors.red,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * .55,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assest/Search.png', width: 24),
-                        const SizedBox(width: 4),
-                        const Text(
-                          'Sing With Google',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                GetBuilder<LoginController>(
+                  init: LoginController(),
+                  initState: (_) {},
+                  builder: (_) {
+                    return AnimatedOpacity(
+                      duration: const Duration(seconds: 1),
+                      opacity: _.opacity,
+                      child: MaterialButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        onPressed: () {
+                          _.login();
+                        },
+                        color: Colors.red,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 30),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * .55,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('assest/Search.png', width: 24),
+                              const SizedBox(width: 4),
+                              const Text(
+                                'Sing With Google',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .06,
