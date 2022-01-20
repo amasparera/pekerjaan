@@ -31,6 +31,8 @@ class FirebaseFirestroreku {
     data['listnama'] = [listnama];
     data['id'] = resul.id;
     data['admin'] = iduser;
+    data['total_tugas'] = 0;
+    data['dibuat'] = DateTime.now();
     return resul.set(data);
   }
 
@@ -83,6 +85,13 @@ class FirebaseFirestroreku {
         .collection('pekerjaan')
         .doc(iddocument)
         .update({'idUser': iduser, 'listnama': listnama});
+  }
+
+  jumlahTugas(iddocument, total) {
+    FirebaseFirestore.instance
+        .collection('pekerjaan')
+        .doc(iddocument)
+        .update({'total_tugas': total});
   }
 
   Future<CategoryModel?> gabung(id) async {

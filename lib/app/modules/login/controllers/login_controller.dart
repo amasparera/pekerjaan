@@ -10,7 +10,7 @@ class LoginController extends GetxController with GetTickerProviderStateMixin {
 
   @override
   void onReady() {
-    Future.delayed(const Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 3), () {
       opacity = 1;
       update();
     });

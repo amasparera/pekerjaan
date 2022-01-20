@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
 import 'package:pekerjaan/app/modules/home/controllers/home_controller.dart';
 import 'package:pekerjaan/app/routes/app_pages.dart';
@@ -13,24 +14,61 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xff17182D),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xffFF6600),
-        onPressed: () {
-          showDialog(context: context, builder: (contex) => dialog(contex));
-        },
-        child: const Icon(Icons.add_business_rounded),
-      ),
+      floatingActionButton: buttonHomeFloating(context),
       body: SafeArea(
           child: Column(
         children: [
           appbar(),
+          const Padding(
+            padding: EdgeInsets.only(left: 4, right: 4, bottom: 0, top: 4),
+            child: Divider(
+              thickness: 4,
+              color: Colors.orange,
+            ),
+          ),
           Expanded(child: listKategory()),
         ],
       )),
 
       //create appBar
     );
+  }
+
+  MaterialButton buttonHomeFloating(BuildContext context) {
+    return MaterialButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+        onPressed: () {
+          showDialog(context: context, builder: (context) => dialog(context));
+        },
+        color: Colors.orange,
+        padding: const EdgeInsets.only(right: 5, left: 20, top: 5, bottom: 5),
+        child: SizedBox(
+          height: 32,
+          width: MediaQuery.of(context).size.width * 0.45,
+          child: Row(
+            children: [
+              Text(
+                'Tambah Pekerjaan',
+                style: TextStyle(
+                  color: Colors.orange.shade50,
+                  fontSize: 16,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                      color: Colors.orange.shade300,
+                      borderRadius: BorderRadius.circular(40)),
+                  child: Icon(
+                    Icons.add_business_rounded,
+                    color: Colors.orange.shade50,
+                  )),
+            ],
+          ),
+        ));
   }
 
   Widget appbar() {
@@ -56,7 +94,7 @@ class HomeView extends GetView<HomeController> {
                   height: 30,
                 ),
               ).asGlass(
-                tintColor: Colors.transparent,
+                tintColor: Colors.orange,
                 clipBorderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(40),
                     topRight: Radius.circular(40)),
@@ -99,8 +137,10 @@ class HomeView extends GetView<HomeController> {
         if (snapshot.hasError) {
           return const Text('Something went wrong');
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LinearProgressIndicator();
-        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasData) {
           List<CategoryModel> pekerjaan = snapshot.data!.docs
               .map((e) => CategoryModel.fromJson(e.data()))
               .toList();
@@ -115,48 +155,114 @@ class HomeView extends GetView<HomeController> {
               return FadeInRightBig(
                 duration: const Duration(milliseconds: 700),
                 delay: Duration(milliseconds: (index + 1) * 40),
-                child: Container(
-                  margin: const EdgeInsets.all(4),
-                  color: Colors.white,
-                  child: ListTile(
-                    onLongPress: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) =>
-                              edit(context, pekerjaan[index]));
-                    },
-                    onTap: () =>
-                        controller.toPekerjaan(pekerjaan[index].idPekerjaan),
-                    title: Text(
-                      pekerjaan[index].name!,
-                      style: const TextStyle(fontSize: 20, color: Colors.blue),
-                    ),
-                    leading: const Icon(Icons.work),
-                  ),
-                ),
+                child: homeCart(pekerjaan, index, context),
               );
             },
           );
+        } else {
+          return const SizedBox();
         }
       },
+    );
+  }
+
+  Container homeCart(List<CategoryModel> pekerjaan, int index, context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.all(4),
+      width: double.infinity,
+      height: 60,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12), color: Colors.black),
+      child: InkWell(
+        onLongPress: () {
+          showDialog(
+              context: context,
+              builder: (context) => edit(context, pekerjaan[index]));
+        },
+        onTap: () {
+          controller.toPekerjaan(pekerjaan[index]);
+        },
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              child: Image.asset('assest/iconcart/Charity.png'),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      pekerjaan[index].name!,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'dibuat ${DateFormat.MMMd().format(pekerjaan[index].dibuat!)}',
+                          style: const TextStyle(
+                              color: Colors.white70, fontSize: 10),
+                        ),
+                        Text(
+                          '${pekerjaan[index].namauser!.length}  orang    -    ${pekerjaan[index].totalTugas!.toString()}  tugas',
+                          style: const TextStyle(
+                              fontSize: 10, color: Colors.white70),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
   Widget dialog(contex) {
     return Dialog(
       child: Container(
-        height: 160,
+        height: 200,
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text('Nama Pekerjan'),
-            TextField(
-              autofocus: true,
-              controller: controller.text,
-            ),
             const SizedBox(height: 10),
+            SizedBox(
+              child: TextField(
+                autofocus: true,
+                controller: controller.text,
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Expanded(
+            //   child: DropdownButton<String>(
+            //     isDense: true,
+            //     // value: controller.setIcon,
+            //     onChanged: (value) => controller.setIcon = value!,
+            //     items: controller.icon
+            //         .map((e) => DropdownMenuItem<String>(
+            //             value: controller.setIcon,
+            //             child: Image.asset(
+            //               e,
+            //               width: 20,
+            //               height: 20,
+            //             )))
+            //         .toList(),
+            //   ),
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,

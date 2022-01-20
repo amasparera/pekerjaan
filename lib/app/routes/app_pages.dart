@@ -36,7 +36,7 @@ class AppPages {
         name: _Paths.PEKERJAAN,
         page: () => const PekerjaanView(),
         binding: PekerjaanBinding(),
-        transition: Transition.rightToLeft),
+        transition: Transition.fadeIn),
     GetPage(
         name: _Paths.LOGIN,
         page: () => const LoginView(),

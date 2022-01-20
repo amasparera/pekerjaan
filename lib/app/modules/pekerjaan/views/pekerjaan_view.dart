@@ -1,4 +1,6 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -13,13 +15,12 @@ class PekerjaanView extends GetView<PekerjaanController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff17182D),
       resizeToAvoidBottomInset: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: AppBar(
-          elevation: 0,
-          title: const Text('Semua Pekerjaan'),
-        ),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text(controller.argumen.name!),
+        centerTitle: true,
       ),
       body: Stack(
         children: [
@@ -33,7 +34,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
   Widget body() {
     final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
         .collection('pekerjaan')
-        .doc(controller.argumen)
+        .doc(controller.argumen.idPekerjaan)
         .collection('tugas')
         .snapshots();
     return StreamBuilder<QuerySnapshot>(
@@ -75,20 +76,28 @@ class PekerjaanView extends GetView<PekerjaanController> {
         }
       },
       leading: pekerjaan[index].status == false
-          ? const Icon(Icons.circle_outlined)
-          : const Icon(Icons.run_circle_rounded, color: Colors.blue),
+          ? const Icon(
+              Icons.circle_outlined,
+              color: Colors.white70,
+            )
+          : const Icon(Icons.run_circle_rounded, color: Colors.orange),
       title: pekerjaan[index].status == false
-          ? Text(pekerjaan[index].name!)
-          : Text(pekerjaan[index].name!,
+          ? Text(pekerjaan[index].name!,
+              style: const TextStyle(color: Colors.white))
+          : Text(
+              pekerjaan[index].name!,
               style: const TextStyle(
-                  color: Colors.grey, decoration: TextDecoration.lineThrough)),
+                  color: Colors.white,
+                  decoration: TextDecoration.lineThrough,
+                  decorationStyle: TextDecorationStyle.solid),
+            ),
       subtitle: Text(
         DateFormat.MMMd().format(pekerjaan[index].hariIni!),
         style: const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
       ),
       trailing: Text(pekerjaan[index].namePekerja!,
-          style:
-              const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
+          style: const TextStyle(
+              color: Colors.orange, fontWeight: FontWeight.bold)),
     );
   }
 
@@ -159,233 +168,154 @@ class PekerjaanView extends GetView<PekerjaanController> {
         ),
       );
 
-  Widget menambahPekerjaan(context) => Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Obx(
-            () => controller.open.value == false
-                ? const SizedBox()
-                : requesTanggal(context),
-          ),
-          Container(
-            height: 75,
-            alignment: Alignment.bottomCenter,
-            color: Colors.blue[200],
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      controller.open.value = !controller.open.value;
-                    },
-                    icon: const Icon(Icons.more_vert_rounded)),
-                Expanded(
-                  child: TextField(
-                    autofocus: false,
-                    onChanged: (val) {
-                      // ignore: avoid_print
-                      print(val);
-                    },
-                    controller: controller.input,
-                    decoration: InputDecoration(
-                        suffix: GestureDetector(
-                            onTap: () {
-                              if (controller.input.text != '') {
-                                controller.menambahkanPekerjan();
-                              }
-                            },
-                            child: const Icon(Icons.send)),
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: 'Tambah tugas'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
-
-  Widget requesTanggal(context) {
-    return SizedBox(
-      height: 35,
-      child: Row(
-        children: [
-          Expanded(
-            child: Obx(() => InkWell(
-                  onTap: () {
-                    controller.opsiTgl.value = 1;
-                    controller.hariini.value = 'Tgl Hari Ini';
-                    controller.descripsi.value = 'Tgl :';
-                    controller.waktuSekarang.value = DateTime.now();
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 4, right: 2, bottom: 4),
-                    decoration: BoxDecoration(
-                        color: controller.opsiTgl.value == 1
-                            ? Colors.red
-                            : Colors.blue[200],
-                        borderRadius: BorderRadius.circular(4)),
-                    child: Center(
-                        child: Text(
-                      'Hari Ini',
-                      style: TextStyle(
-                          color: controller.opsiTgl.value == 1
-                              ? Colors.white
-                              : Colors.black),
-                    )),
-                  ),
-                )),
-          ),
-          Expanded(
-            child: Obx(() => InkWell(
-                  onTap: () {
-                    controller.opsiTgl.value = 2;
-                    controller.hariini.value = 'Tgl Order';
-                    controller.descripsi.value = 'Order Tgl :';
-                    controller.orderTime(context);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 2, right: 2, bottom: 4),
-                    decoration: BoxDecoration(
-                        color: controller.opsiTgl.value == 2
-                            ? Colors.red
-                            : Colors.blue[200],
-                        borderRadius: BorderRadius.circular(4)),
-                    child: Center(
-                        child: Text('Pilih tanggal',
-                            style: TextStyle(
-                                color: controller.opsiTgl.value == 2
-                                    ? Colors.white
-                                    : Colors.black))),
-                  ),
-                )),
-          ),
-          Expanded(
-            child: Obx(() => InkWell(
-                  onTap: () {
-                    controller.opsiTgl.value = 3;
-                    controller.hariini.value = 'Tgl Hari Ini';
-                    controller.descripsi.value = 'Berulang Tgl';
-                    controller.waktuSekarang.value = DateTime.now();
-                    showDialog(
-                        context: context, builder: (context) => dialogUlangi());
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 2, right: 4, bottom: 4),
-                    decoration: BoxDecoration(
-                        color: controller.opsiTgl.value == 3
-                            ? Colors.red
-                            : Colors.blue[200],
-                        borderRadius: BorderRadius.circular(4)),
-                    child: Center(
-                        child: Text(
-                      'Ulangi',
-                      style: TextStyle(
-                          color: controller.opsiTgl.value == 3
-                              ? Colors.white
-                              : Colors.black),
-                    )),
-                  ),
-                )),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget dialogUlangi() {
-    return Dialog(
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        height: 500,
+  Widget menambahPekerjaan(context) => FadeInUp(
+        duration: const Duration(milliseconds: 800),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            const Text(
-              'Pilih Hari ',
-              style: TextStyle(fontSize: 18),
+            Obx(
+              () => controller.open.value == false
+                  ? const SizedBox()
+                  : requesTanggal(context),
             ),
-            const Padding(
-              padding: EdgeInsets.all(4),
-              child: Divider(
-                thickness: 2,
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 18 / 2,
               ),
-            ),
-            Obx(() => ListTile(
-                  leading: Checkbox(
-                      value: controller.senin.value,
-                      onChanged: (value) {
-                        controller.senin.value = value!;
-                      }),
-                  title: const Text('Senin'),
-                )),
-            Obx(() => ListTile(
-                  leading: Checkbox(
-                      value: controller.selasa.value,
-                      onChanged: (value) {
-                        controller.selasa.value = value!;
-                      }),
-                  title: const Text('Selasa'),
-                )),
-            Obx(() => ListTile(
-                  leading: Checkbox(
-                      value: controller.rabu.value,
-                      onChanged: (value) {
-                        controller.rabu.value = value!;
-                      }),
-                  title: const Text('Rabu'),
-                )),
-            Obx(() => ListTile(
-                  leading: Checkbox(
-                      value: controller.kamis.value,
-                      onChanged: (value) {
-                        controller.kamis.value = value!;
-                      }),
-                  title: const Text('Kamis'),
-                )),
-            Obx(() => ListTile(
-                  leading: Checkbox(
-                      value: controller.jumat.value,
-                      onChanged: (value) {
-                        controller.jumat.value = value!;
-                      }),
-                  title: const Text('Jum\'at'),
-                )),
-            Obx(() => ListTile(
-                  leading: Checkbox(
-                      value: controller.sabtu.value,
-                      onChanged: (value) {
-                        controller.sabtu.value = value!;
-                      }),
-                  title: const Text('Sabtu'),
-                )),
-            Obx(() => ListTile(
-                  leading: Checkbox(
-                      value: controller.minggu.value,
-                      onChanged: (value) {
-                        controller.minggu.value = value!;
-                      }),
-                  title: const Text('Minggu'),
-                )),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(2),
-                color: Colors.blue,
-                child: InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: const Center(
-                    child: Text(
-                      'Simpan',
-                      style: TextStyle(color: Colors.white),
-                    ),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    offset: const Offset(0, 4),
+                    blurRadius: 32,
+                    color: const Color(0xFF087949).withOpacity(0.08),
                   ),
+                ],
+              ),
+              child: SafeArea(
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        controller.open.value = !controller.open.value;
+                      },
+                      child: const Icon(Icons.more_vert_rounded,
+                          color: Colors.white),
+                    ),
+                    const SizedBox(width: 18),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 18 * 0.75,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.sentiment_satisfied_alt_outlined,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .color!
+                                  .withOpacity(0.64),
+                            ),
+                            const SizedBox(width: 18 / 4),
+                            Expanded(
+                              child: TextField(
+                                controller: controller.input,
+                                decoration: const InputDecoration(
+                                  hintText: "Name tugas",
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 18 / 4),
+                            GestureDetector(
+                              onTap: () {
+                                controller.menambahkanPekerjan();
+                              },
+                              child: const Icon(
+                                Icons.send_rounded,
+                                color: Colors.orange,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             )
           ],
         ),
+      );
+
+  Widget requesTanggal(context) {
+    return Container(
+      height: 114,
+      width: double.infinity,
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              children: [
+                const Text('Tanggal :'),
+                const Spacer(),
+                Obx(() => controller.opsiTgl.value != true
+                    ? Text(DateFormat.yMMMd()
+                        .format(controller.waktuDipilih.value))
+                    : Text(DateFormat.MMMd()
+                            .format(controller.range.value.start) +
+                        ' sampai ' +
+                        DateFormat.MMMd().format(controller.range.value.end))),
+                TextButton(
+                    onPressed: () {
+                      if (controller.opsiTgl.value != true) {
+                        controller.orderTime(context);
+                      } else {
+                        controller.rangeWaktu(context);
+                      }
+                    },
+                    child: const Text('edit'))
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              children: [
+                const Text('Status   :'),
+                const Spacer(),
+                Obx(() => Text(
+                      controller.opsiTgl.value == false ? 'sekali' : 'ulangi',
+                      style: const TextStyle(color: Colors.black),
+                    )),
+                const SizedBox(width: 6),
+                Obx(() => Switch(
+                    value: controller.opsiTgl.value,
+                    onChanged: (val) {
+                      controller.opsiTgl.value = val;
+                      if (val == false) {
+                        controller.range.value = DateTimeRange(
+                            start: DateTime.now(), end: DateTime.now());
+                      }
+                    })),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

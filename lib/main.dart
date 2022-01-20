@@ -18,12 +18,73 @@ void main() async {
   Hive.init(document.path);
   Hive.registerAdapter<Ulangi>(UlangiAdapter());
   await Hive.openBox('ulangi');
-  runApp(
-    GetMaterialApp(
+  runApp(FutureBuilder(
+      future: Future.delayed(const Duration(seconds: 3)),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Loading();
+        } else {
+          return const Main();
+        }
+      }));
+}
+
+class Main extends StatelessWidget {
+  const Main({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Pekerjaan",
       initialRoute: AppPages.INITIAL(),
       getPages: AppPages.routes,
-    ),
-  );
+    );
+  }
+}
+
+class Loading extends GetView<LoadingController> {
+  const Loading({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Tesla Service',
+      home: Scaffold(
+        body: Center(
+            child: GetBuilder<LoadingController>(
+          init: LoadingController(),
+          initState: (_) {},
+          builder: (_) {
+            return AnimatedScale(
+              duration: const Duration(milliseconds: 500),
+              scale: _.active ? 1 : 2,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 500),
+                opacity: _.active ? 1 : 0,
+                child: Image.asset(
+                  'assest/ic_launcher.png',
+                  width: 80,
+                ),
+              ),
+            );
+          },
+        )),
+      ),
+    );
+  }
+}
+
+class LoadingController extends GetxController {
+  bool active = false;
+
+  @override
+  void onReady() {
+    active = true;
+    update();
+    super.onReady();
+  }
 }

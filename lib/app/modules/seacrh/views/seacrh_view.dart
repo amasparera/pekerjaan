@@ -11,22 +11,24 @@ class SeacrhView extends GetView<SeacrhController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff17182D),
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.blue),
+        iconTheme: const IconThemeData(color: Colors.orange),
         titleSpacing: 0,
         elevation: 1,
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         title: TextField(
+          style: const TextStyle(color: Colors.white),
           autofocus: true,
           onChanged: (value) {
             controller.searchUser();
           },
           maxLines: 1,
           decoration: const InputDecoration(
-            border: InputBorder.none,
-            hintText: 'Search "name"',
-          ),
+              border: InputBorder.none,
+              hintText: 'Search "name"',
+              hintStyle: TextStyle(color: Colors.white70)),
         ),
         actions: [
           Padding(
@@ -50,13 +52,26 @@ class SeacrhView extends GetView<SeacrhController> {
             delay: Duration(microseconds: index * 50),
             child: ListTile(
               onTap: () => controller.tambahAnggota(controller.listdata[index]),
-              title: Text(controller.listdata[index].name!),
-              subtitle: Text(controller.listdata[index].email!),
-              leading: CircleAvatar(
-                backgroundImage:
-                    NetworkImage(controller.listdata[index].profileUrl!),
+              title: Text(
+                controller.listdata[index].name!,
+                style: const TextStyle(color: Colors.white),
               ),
-              trailing: const Icon(Icons.person_add_alt_1),
+              subtitle: Text(controller.listdata[index].email!,
+                  style: const TextStyle(color: Colors.white70)),
+              leading: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: CircleAvatar(
+                    backgroundImage:
+                        NetworkImage(controller.listdata[index].profileUrl!),
+                  ),
+                ),
+              ),
+              trailing: const Icon(
+                Icons.person_add_alt_1,
+                color: Colors.white70,
+              ),
             ),
           ),
         ),

@@ -74,7 +74,7 @@ class ProfileView extends GetView<ProfileController> {
                       alignment: Alignment.bottomCenter,
                       child: Column(
                         children: [
-                          FadeInLeft(
+                          FadeInDown(
                             animate: true,
                             delay: const Duration(milliseconds: 180),
                             duration: const Duration(milliseconds: 200),
@@ -88,7 +88,7 @@ class ProfileView extends GetView<ProfileController> {
                               ),
                             ),
                           ),
-                          FadeInLeft(
+                          FadeInDown(
                             animate: true,
                             delay: const Duration(microseconds: 170),
                             duration: const Duration(milliseconds: 200),

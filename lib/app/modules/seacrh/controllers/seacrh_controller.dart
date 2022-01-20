@@ -14,6 +14,7 @@ class SeacrhController extends GetxController {
   CategoryModel argumen = Get.arguments;
 
   Future<List<UserModel>> searchUser() async {
+    listdata.clear();
     QuerySnapshot<Map<String, dynamic>> data = await FirebaseFirestore.instance
         .collection('users')
         .where('name', isGreaterThanOrEqualTo: seacrh.text)
