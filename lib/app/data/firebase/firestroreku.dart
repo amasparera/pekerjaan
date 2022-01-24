@@ -75,7 +75,41 @@ class FirebaseFirestroreku {
         .get()
         .then((value) {
       if (value.exists) {
-        CategoryModel.fromJson(value.data());
+        return CategoryModel.fromJson(value.data());
+      }
+    });
+  }
+
+  tambahJumlah(idpekerjaan) async {
+    await FirebaseFirestore.instance
+        .collection('pekerjaan')
+        .doc(idpekerjaan)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        CategoryModel data = CategoryModel.fromJson(value.data());
+
+        FirebaseFirestore.instance
+            .collection('pekerjaan')
+            .doc(data.idPekerjaan)
+            .update({'total_tugas': data.totalTugas! + 1});
+      }
+    });
+  }
+
+  kurangiJumlah(idpekerjaan) async {
+    await FirebaseFirestore.instance
+        .collection('pekerjaan')
+        .doc(idpekerjaan)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        CategoryModel data = CategoryModel.fromJson(value.data());
+
+        FirebaseFirestore.instance
+            .collection('pekerjaan')
+            .doc(data.idPekerjaan)
+            .update({'total_tugas': data.totalTugas! - 1});
       }
     });
   }
@@ -85,13 +119,6 @@ class FirebaseFirestroreku {
         .collection('pekerjaan')
         .doc(iddocument)
         .update({'idUser': iduser, 'listnama': listnama});
-  }
-
-  jumlahTugas(iddocument, total) {
-    FirebaseFirestore.instance
-        .collection('pekerjaan')
-        .doc(iddocument)
-        .update({'total_tugas': total});
   }
 
   Future<CategoryModel?> gabung(id) async {

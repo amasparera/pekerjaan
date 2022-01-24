@@ -134,9 +134,7 @@ class HomeView extends GetView<HomeController> {
     return StreamBuilder<QuerySnapshot>(
       stream: usersStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return const Text('Something went wrong');
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -160,7 +158,7 @@ class HomeView extends GetView<HomeController> {
             },
           );
         } else {
-          return const SizedBox();
+          return const Text('Something went wrong');
         }
       },
     );

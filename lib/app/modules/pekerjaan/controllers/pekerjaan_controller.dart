@@ -31,8 +31,7 @@ class PekerjaanController extends GetxController {
           'descripsi': descripsi.value,
           'hariini': waktuDipilih.value
         };
-        FirebaseFirestroreku()
-            .jumlahTugas(argumen.idPekerjaan, argumen.totalTugas! + 1);
+        FirebaseFirestroreku().tambahJumlah(argumen.idPekerjaan);
         FirebaseFirestroreku().menambahTugas(
             data: map, id: argumen.idPekerjaan, idtugas: value.id);
       });
@@ -99,8 +98,7 @@ class PekerjaanController extends GetxController {
   }
 
   void hapusTugas(idtugas) {
-    FirebaseFirestroreku()
-        .jumlahTugas(argumen.idPekerjaan, argumen.totalTugas! - 1);
+    FirebaseFirestroreku().kurangiJumlah(argumen.idPekerjaan);
     FirebaseFirestroreku()
         .hapusTugas(id: argumen.idPekerjaan, idtugas: idtugas);
   }
