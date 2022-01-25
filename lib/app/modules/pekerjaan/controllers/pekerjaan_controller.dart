@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/firebase/firestroreku.dart';
 import 'package:pekerjaan/app/data/getstore/myuser.dart';
-import 'package:pekerjaan/app/data/hive/hive_update.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
 
 class PekerjaanController extends GetxController {
   TextEditingController input = TextEditingController();
   var opsiTgl = false.obs;
+  var barcode = false.obs;
 
   CategoryModel argumen = Get.arguments;
   var hariini = 'Tgl Hari Ini'.obs;
@@ -19,7 +19,7 @@ class PekerjaanController extends GetxController {
   var open = false.obs;
 
   void menambahkanPekerjan() async {
-    if (opsiTgl.value == false) {
+    if (opsiTgl.isFalse) {
       await FirebaseFirestroreku()
           .documentTugas(argumen.idPekerjaan!)
           .then((value) {
@@ -27,6 +27,7 @@ class PekerjaanController extends GetxController {
           'id': value.id,
           'name': input.text,
           'status': false,
+          'barcode': barcode.value,
           'namapekerja': '',
           'descripsi': descripsi.value,
           'hariini': waktuDipilih.value
@@ -37,31 +38,22 @@ class PekerjaanController extends GetxController {
       });
       input.clear();
     } else {
-      // await FirebaseFirestroreku()
-      //     .documentTugas(argumen.idPekerjaan)
-      //     .then((value) {
-      //   Map<String, dynamic> map = {
-      //     'id': value.id,
-      //     'name': input.text,
-      //     'status': false,
-      //     'namapekerja': '',
-      //     'descripsi': descripsi.value,
-      //     'hariini': waktuDipilih.value,
-      //     // 'day': ulangi,
-      //   };
-
-      //   // Update().menambahUlangi(
-      //   //   argumen.idPekerjaan!,
-      //   //   map,
-      //   // day,
-      //   // );
-
-      //   opsiTgl.value = false;
-      //   FirebaseFirestroreku()
-      //       .jumlahTugas(argumen.idPekerjaan, argumen.totalTugas! + 1);
-      //   FirebaseFirestroreku().menambahTugas(
-      //       data: map, id: argumen.idPekerjaan, idtugas: value.id);
-      // });
+      await FirebaseFirestroreku()
+          .documentTugas(argumen.idPekerjaan!)
+          .then((value) {
+        Map<String, dynamic> map = {
+          'id': value.id,
+          'name': input.text,
+          'status': false,
+          'barcode': barcode.value,
+          'namapekerja': '',
+          'descripsi': descripsi.value,
+          'hariini': waktuDipilih.value
+        };
+        FirebaseFirestroreku().tambahJumlah(argumen.idPekerjaan);
+        FirebaseFirestroreku().menambahTugas(
+            data: map, id: argumen.idPekerjaan, idtugas: value.id);
+      });
     }
   }
 

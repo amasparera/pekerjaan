@@ -6,6 +6,7 @@ class PekerjaanModel {
   String? descripsi;
   String? namePekerja;
   DateTime? hariIni;
+  bool? barcode;
   // DateTime? update;
   bool? status;
 
@@ -28,6 +29,7 @@ class PekerjaanModel {
     id = json['id'];
     descripsi = json['descripsi'];
     hariIni = (json['hariini'] as Timestamp).toDate();
+    barcode = json['barcode'];
     // update = (json['update'] as Timestamp).toDate();
   }
 

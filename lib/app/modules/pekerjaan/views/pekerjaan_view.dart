@@ -2,9 +2,11 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:pekerjaan/app/data/heleper/pdfQr.dart';
 import 'package:pekerjaan/app/data/model/model_pekerjaan.dart';
 
 import '../controllers/pekerjaan_controller.dart';
@@ -70,8 +72,19 @@ class PekerjaanView extends GetView<PekerjaanController> {
             builder: (context) =>
                 dialogEdit(pekerjaan[index].id, context, pekerjaan[index].day));
       },
-      onTap: () {
-        if (pekerjaan[index].status == false) {
+      onTap: () async {
+        if (pekerjaan[index].barcode == true) {
+          await FlutterBarcodeScanner.scanBarcode(
+                  '#ff6666', 'Cancel', true, ScanMode.DEFAULT)
+              .then((value) {
+            if (value != '-1') {
+              controller.mengerjakan(value);
+            } else {
+              Get.snackbar('Gagal', 'mohon mengulang kembali',
+                  colorText: Colors.white);
+            }
+          });
+        } else if (pekerjaan[index].status == false) {
           controller.mengerjakan(pekerjaan[index].id);
         }
       },
@@ -95,9 +108,20 @@ class PekerjaanView extends GetView<PekerjaanController> {
         DateFormat.MMMd().format(pekerjaan[index].hariIni!),
         style: const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
       ),
-      trailing: Text(pekerjaan[index].namePekerja!,
-          style: const TextStyle(
-              color: Colors.orange, fontWeight: FontWeight.bold)),
+      trailing: (pekerjaan[index].barcode == true &&
+              pekerjaan[index].namePekerja == '')
+          ? IconButton(
+              onPressed: () {
+                membuatQR(pekerjaan[index].id!, pekerjaan[index].name);
+              },
+              icon: const Icon(
+                Icons.qr_code_scanner_outlined,
+                color: Colors.white70,
+              ),
+            )
+          : Text(pekerjaan[index].namePekerja!,
+              style: const TextStyle(
+                  color: Colors.orange, fontWeight: FontWeight.bold)),
     );
   }
 
@@ -256,10 +280,10 @@ class PekerjaanView extends GetView<PekerjaanController> {
 
   Widget requesTanggal(context) {
     return Container(
-      height: 114,
+      height: 155,
       width: double.infinity,
       margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.white,
@@ -312,6 +336,28 @@ class PekerjaanView extends GetView<PekerjaanController> {
                             start: DateTime.now(), end: DateTime.now());
                       }
                     })),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              children: [
+                const Text('Barcode :'),
+                const Spacer(),
+                Obx(() => Text(
+                      controller.barcode.value == false ? 'tidak' : 'perlu',
+                      style: const TextStyle(color: Colors.black),
+                    )),
+                const SizedBox(width: 6),
+                Obx(
+                  () => Switch(
+                    value: controller.barcode.value,
+                    onChanged: (val) {
+                      controller.barcode.value = val;
+                    },
+                  ),
+                ),
               ],
             ),
           )
