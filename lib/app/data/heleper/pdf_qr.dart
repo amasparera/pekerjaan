@@ -1,8 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,7 +7,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 
-membuatQR(String code, name) async {
+membuatqr(String code, name) async {
   final pdf = pw.Document();
 
   var data =
@@ -47,7 +44,7 @@ membuatQR(String code, name) async {
 
   // penyimpanan
   final lokasi = await getApplicationDocumentsDirectory();
-  final file = File('${lokasi.path}/print_product.pdf');
+  final file = File('${lokasi.path}/pekerjaan_$name.pdf');
 
   // timpa file kosong dengan file pdf
   await file.writeAsBytes(btye);

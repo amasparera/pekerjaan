@@ -1,12 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:pekerjaan/app/data/heleper/pdfQr.dart';
+import 'package:pekerjaan/app/data/heleper/pdf_qr.dart';
 import 'package:pekerjaan/app/data/model/model_pekerjaan.dart';
 
 import '../controllers/pekerjaan_controller.dart';
@@ -112,7 +111,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
               pekerjaan[index].namePekerja == '')
           ? IconButton(
               onPressed: () {
-                membuatQR(pekerjaan[index].id!, pekerjaan[index].name);
+                membuatqr(pekerjaan[index].id!, pekerjaan[index].name);
               },
               icon: const Icon(
                 Icons.qr_code_scanner_outlined,
