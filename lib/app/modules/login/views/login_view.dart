@@ -70,20 +70,22 @@ class LoginView extends GetView<LoginController> {
                             vertical: 12, horizontal: 30),
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width * .55,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset('assest/Search.png', width: 24),
-                              const SizedBox(width: 4),
-                              const Text(
-                                'Sing With Google',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                            ],
-                          ),
+                          child: Obx(() => controller.isLogin.value
+                              ? const Center(child: CircularProgressIndicator())
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset('assest/Search.png', width: 24),
+                                    const SizedBox(width: 4),
+                                    const Text(
+                                      'Sing With Google',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                )),
                         ),
                       ),
                     );

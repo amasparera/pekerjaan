@@ -3,8 +3,10 @@ import 'package:pekerjaan/app/data/firebase/auth_google.dart';
 
 class LoginController extends GetxController with GetTickerProviderStateMixin {
   double opacity = 0.0;
+  var isLogin = false.obs;
 
-  void login() {
+  void login() async {
+    isLogin.value = true;
     AuthUser().signInWithGoogle();
   }
 

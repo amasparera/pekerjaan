@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pekerjaan/app/data/firebase/firestroreku.dart';
 import 'package:pekerjaan/app/data/getstore/myuser.dart';
+import 'package:pekerjaan/app/modules/login/controllers/login_controller.dart';
 import 'package:pekerjaan/app/routes/app_pages.dart';
 
 class AuthUser {
@@ -47,7 +48,9 @@ class AuthUser {
             .then((value) => Get.offAndToNamed(Routes.HOME));
       } else {
         // ignore: avoid_print
-        return print('failed');
+        Get.snackbar('Login', 'Login failed');
+        final con = Get.find<LoginController>();
+        con.isLogin.value = false;
       }
     } on PlatformException {
       // ignore: avoid_print

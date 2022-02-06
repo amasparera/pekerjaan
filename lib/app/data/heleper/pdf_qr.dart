@@ -16,7 +16,7 @@ membuatqr(String code, name) async {
 
   pdf.addPage(pw.Page(
       margin: const pw.EdgeInsets.all(.4),
-      pageFormat: const PdfPageFormat(5, 3),
+      pageFormat: const PdfPageFormat(4, 3),
       build: (pw.Context context) => pw.Container(
           width: 5,
           height: 3,
@@ -33,10 +33,10 @@ membuatqr(String code, name) async {
             pw.SizedBox(width: .3),
             pw.Expanded(
                 child: pw.Text(name,
-                    maxLines: 3,
+                    maxLines: 5,
                     overflow: pw.TextOverflow.clip,
                     style: pw.TextStyle(
-                        color: PdfColors.black, font: myFont, fontSize: 0.5)))
+                        color: PdfColors.black, font: myFont, fontSize: 0.26)))
           ]))));
 
 // menyimpan

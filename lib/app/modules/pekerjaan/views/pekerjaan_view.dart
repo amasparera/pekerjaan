@@ -62,73 +62,88 @@ class PekerjaanView extends GetView<PekerjaanController> {
         });
   }
 
-  ListTile hariIni(
+  Widget hariIni(
       BuildContext context, List<PekerjaanModel> pekerjaan, int index) {
-    return ListTile(
-      onLongPress: () {
-        showDialog(
-            context: context,
-            builder: (context) =>
-                dialogEdit(pekerjaan[index].id, context, pekerjaan[index].day));
-      },
-      onTap: () async {
-        if (pekerjaan[index].barcode == true) {
-          await FlutterBarcodeScanner.scanBarcode(
-                  '#ff6666', 'Cancel', true, ScanMode.DEFAULT)
-              .then((value) {
-            if (value != '-1') {
-              controller.mengerjakan(value);
-            } else {
-              Get.snackbar('Gagal', 'mohon mengulang kembali',
-                  colorText: Colors.white);
+    return Column(
+      children: [
+        ListTile(
+          onLongPress: () {
+            showDialog(
+                context: context,
+                builder: (context) => dialogEdit(context, pekerjaan[index]));
+          },
+          onTap: () async {
+            if (pekerjaan[index].barcode == true) {
+              await FlutterBarcodeScanner.scanBarcode(
+                      '#ff6666', 'Cancel', true, ScanMode.DEFAULT)
+                  .then((value) {
+                if (value != '-1' && value == pekerjaan[index].id) {
+                  controller.mengerjakan(value);
+                  Get.snackbar('berhasil', 'tugas dikerjaan',
+                      colorText: Colors.white);
+                } else if (value != '-1' && value != pekerjaan[index].id) {
+                  Get.snackbar('Gagal', 'barcode salah',
+                      colorText: Colors.white);
+                } else {
+                  Get.snackbar('Gagal', 'mohon mengulang kembali',
+                      colorText: Colors.white);
+                }
+              });
+            } else if (pekerjaan[index].status == false) {
+              controller.mengerjakan(pekerjaan[index].id);
             }
-          });
-        } else if (pekerjaan[index].status == false) {
-          controller.mengerjakan(pekerjaan[index].id);
-        }
-      },
-      leading: pekerjaan[index].status == false
-          ? const Icon(
-              Icons.circle_outlined,
-              color: Colors.white70,
-            )
-          : const Icon(Icons.run_circle_rounded, color: Colors.orange),
-      title: pekerjaan[index].status == false
-          ? Text(pekerjaan[index].name!,
-              style: const TextStyle(color: Colors.white))
-          : Text(
-              pekerjaan[index].name!,
-              style: const TextStyle(
-                  color: Colors.white,
-                  decoration: TextDecoration.lineThrough,
-                  decorationStyle: TextDecorationStyle.solid),
-            ),
-      subtitle: Text(
-        DateFormat.MMMd().format(pekerjaan[index].hariIni!),
-        style: const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
-      ),
-      trailing: (pekerjaan[index].barcode == true &&
-              pekerjaan[index].namePekerja == '')
-          ? IconButton(
-              onPressed: () {
-                membuatqr(pekerjaan[index].id!, pekerjaan[index].name);
-              },
-              icon: const Icon(
-                Icons.qr_code_scanner_outlined,
-                color: Colors.white70,
-              ),
-            )
-          : Text(pekerjaan[index].namePekerja!,
-              style: const TextStyle(
-                  color: Colors.orange, fontWeight: FontWeight.bold)),
+          },
+          leading: pekerjaan[index].status == false
+              ? const Icon(
+                  Icons.circle_outlined,
+                  color: Colors.white70,
+                )
+              : const Icon(Icons.run_circle_rounded, color: Colors.orange),
+          title: pekerjaan[index].status == false
+              ? Text(pekerjaan[index].name!,
+                  style: const TextStyle(color: Colors.white))
+              : Text(
+                  pekerjaan[index].name!,
+                  style: const TextStyle(
+                      color: Colors.white60,
+                      decoration: TextDecoration.lineThrough,
+                      decorationStyle: TextDecorationStyle.solid),
+                ),
+          subtitle: Text(
+            DateFormat.MMMd().format(pekerjaan[index].hariIni!),
+            style: const TextStyle(
+                color: Colors.grey, fontStyle: FontStyle.italic),
+          ),
+          trailing: (pekerjaan[index].barcode == true &&
+                  pekerjaan[index].namePekerja == '')
+              ? IconButton(
+                  onPressed: () {
+                    membuatqr(pekerjaan[index].id!, pekerjaan[index].name);
+                  },
+                  icon: const Icon(
+                    Icons.qr_code_scanner_outlined,
+                    color: Colors.white70,
+                  ),
+                )
+              : Text(pekerjaan[index].namePekerja!,
+                  style: const TextStyle(
+                      color: Colors.orange, fontWeight: FontWeight.bold)),
+        ),
+        const Padding(
+          padding: EdgeInsets.only(left: 14),
+          child: Divider(
+            color: Colors.white24,
+          ),
+        )
+      ],
     );
   }
 
 //  ${DateFormat.E().format(DateTime.now())}
-  Dialog dialogEdit(idtugas, context, listday) => Dialog(
+  Dialog dialogEdit(context, PekerjaanModel model) => Dialog(
         child: Container(
           padding: const EdgeInsets.all(12),
-          height: 200,
+          height: 240,
           child: Column(
             children: [
               const Text(
@@ -145,12 +160,11 @@ class PekerjaanView extends GetView<PekerjaanController> {
                 children: [
                   Expanded(
                     child: Container(
-                      margin: const EdgeInsets.only(bottom: 10, top: 10),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       color: Colors.blue,
                       child: InkWell(
                         onTap: () {
-                          controller.belumDikerjakan(idtugas);
+                          controller.belumDikerjakan(model.id);
                           Get.back();
                         },
                         child: const Center(
@@ -168,11 +182,33 @@ class PekerjaanView extends GetView<PekerjaanController> {
                 children: [
                   Expanded(
                     child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       color: Colors.red,
                       child: InkWell(
                         onTap: () {
-                          controller.hapusTugas(idtugas);
+                          controller.rangeWaktu(context, model);
+                        },
+                        child: const Center(
+                          child: Text(
+                            'Ulangi',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      color: Colors.red,
+                      child: InkWell(
+                        onTap: () {
+                          controller.hapusTugas(model.id);
                           Get.back();
                         },
                         child: const Center(
@@ -279,7 +315,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
 
   Widget requesTanggal(context) {
     return Container(
-      height: 155,
+      height: 104,
       width: double.infinity,
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(2),
@@ -296,45 +332,14 @@ class PekerjaanView extends GetView<PekerjaanController> {
               children: [
                 const Text('Tanggal :'),
                 const Spacer(),
-                Obx(() => controller.opsiTgl.value != true
-                    ? Text(DateFormat.yMMMd()
-                        .format(controller.waktuDipilih.value))
-                    : Text(DateFormat.MMMd()
-                            .format(controller.range.value.start) +
-                        ' sampai ' +
-                        DateFormat.MMMd().format(controller.range.value.end))),
+                Text(
+                  DateFormat.yMMMd().format(controller.waktuDipilih.value),
+                ),
                 TextButton(
                     onPressed: () {
-                      if (controller.opsiTgl.value != true) {
-                        controller.orderTime(context);
-                      } else {
-                        controller.rangeWaktu(context);
-                      }
+                      controller.orderTime(context);
                     },
                     child: const Text('edit'))
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              children: [
-                const Text('Status   :'),
-                const Spacer(),
-                Obx(() => Text(
-                      controller.opsiTgl.value == false ? 'sekali' : 'ulangi',
-                      style: const TextStyle(color: Colors.black),
-                    )),
-                const SizedBox(width: 6),
-                Obx(() => Switch(
-                    value: controller.opsiTgl.value,
-                    onChanged: (val) {
-                      controller.opsiTgl.value = val;
-                      if (val == false) {
-                        controller.range.value = DateTimeRange(
-                            start: DateTime.now(), end: DateTime.now());
-                      }
-                    })),
               ],
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/firebase/firestroreku.dart';
 import 'package:pekerjaan/app/data/getstore/myuser.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
+import 'package:pekerjaan/app/data/model/model_pekerjaan.dart';
 
 class PekerjaanController extends GetxController {
   TextEditingController input = TextEditingController();
@@ -14,12 +15,13 @@ class PekerjaanController extends GetxController {
   var descripsi = 'no scan'.obs;
 
   var waktuDipilih = DateTime.now().obs;
-  var range = DateTimeRange(start: DateTime.now(), end: DateTime.now()).obs;
+  // var range = DateTimeRange(start: DateTime.now(), end: DateTime.now()).obs;
 
   var open = false.obs;
 
   void menambahkanPekerjan() async {
-    if (opsiTgl.isFalse) {
+    // if (opsiTgl.isFalse) {
+    if (input.text != '') {
       await FirebaseFirestroreku()
           .documentTugas(argumen.idPekerjaan!)
           .then((value) {
@@ -37,24 +39,25 @@ class PekerjaanController extends GetxController {
             data: map, id: argumen.idPekerjaan, idtugas: value.id);
       });
       input.clear();
-    } else {
-      await FirebaseFirestroreku()
-          .documentTugas(argumen.idPekerjaan!)
-          .then((value) {
-        Map<String, dynamic> map = {
-          'id': value.id,
-          'name': input.text,
-          'status': false,
-          'barcode': barcode.value,
-          'namapekerja': '',
-          'descripsi': descripsi.value,
-          'hariini': waktuDipilih.value
-        };
-        FirebaseFirestroreku().tambahJumlah(argumen.idPekerjaan);
-        FirebaseFirestroreku().menambahTugas(
-            data: map, id: argumen.idPekerjaan, idtugas: value.id);
-      });
     }
+    // } else {
+    // await FirebaseFirestroreku()
+    //     .documentTugas(argumen.idPekerjaan!)
+    //     .then((value) {
+    //   Map<String, dynamic> map = {
+    //     'id': value.id,
+    //     'name': input.text,
+    //     'status': false,
+    //     'barcode': barcode.value,
+    //     'namapekerja': '',
+    //     'descripsi': descripsi.value,
+    //     'hariini': waktuDipilih.value
+    //   };
+    //   FirebaseFirestroreku().tambahJumlah(argumen.idPekerjaan);
+    //   FirebaseFirestroreku().menambahTugas(
+    //       data: map, id: argumen.idPekerjaan, idtugas: value.id);
+    // });
+    // }
   }
 
   void orderTime(context) async {
@@ -68,14 +71,27 @@ class PekerjaanController extends GetxController {
     }
   }
 
-  void rangeWaktu(context) async {
-    DateTimeRange? data = await showDateRangePicker(
-        context: context, firstDate: DateTime.now(), lastDate: DateTime(2030));
-
-    if (data == null) {
-    } else {
-      range.value = data;
-    }
+  void rangeWaktu(context, PekerjaanModel model) async {
+    await showDateRangePicker(
+            context: context,
+            firstDate: DateTime.now(),
+            lastDate: DateTime(2030))
+        .then((value) async {
+      if (value == null) {
+        Get.back();
+        Get.snackbar('Gagal', 'gagal mengulang tanggal kosong',
+            colorText: Colors.white);
+      } else {
+        var start = value.start;
+        var end = value.end;
+        List<DateTime> list = [];
+        while (start.isBefore(end.add(const Duration(days: 1)))) {
+          list.add(start);
+          start = start.add(const Duration(days: 1));
+        }
+        lopingwaktu(model, list);
+      }
+    });
   }
 
   void mengerjakan(idtugas) async {
@@ -93,5 +109,27 @@ class PekerjaanController extends GetxController {
     FirebaseFirestroreku().kurangiJumlah(argumen.idPekerjaan);
     FirebaseFirestroreku()
         .hapusTugas(id: argumen.idPekerjaan, idtugas: idtugas);
+  }
+
+  lopingwaktu(PekerjaanModel model, List<DateTime> list) async {
+    for (var index = 0; index <= list.length - 1; index++) {
+      await FirebaseFirestroreku()
+          .documentTugas(argumen.idPekerjaan!)
+          .then((value) {
+        Map<String, dynamic> map = {
+          'id': value.id,
+          'name': model.name,
+          'status': false,
+          'barcode': model.barcode,
+          'namapekerja': '',
+          'descripsi': model.descripsi,
+          'hariini': list[index]
+        };
+        FirebaseFirestroreku().tambahJumlah(argumen.idPekerjaan);
+        FirebaseFirestroreku().menambahTugas(
+            data: map, id: argumen.idPekerjaan, idtugas: value.id);
+      });
+    }
+    Get.back();
   }
 }
