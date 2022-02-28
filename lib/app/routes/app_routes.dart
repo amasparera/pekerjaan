@@ -15,6 +15,7 @@ abstract class Routes {
   static const SEACRH = _Paths.SEACRH;
   // ignore: constant_identifier_names
   static const ONBOARD = _Paths.ONBOARD;
+  static const IMAGEUPLOAD = _Paths.IMAGEUPLOAD;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const SEACRH = '/seacrh';
   // ignore: constant_identifier_names
   static const ONBOARD = '/onboard';
+  static const IMAGEUPLOAD = '/imageupload';
 }

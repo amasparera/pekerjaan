@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:pekerjaan/app/data/model/model_category.dart';
 import 'package:pekerjaan/app/data/model/model_pekerjaan.dart';
@@ -164,6 +165,20 @@ class FirebaseFirestroreku {
         .update({'status': true, 'namapekerja': namapekerja});
   }
 
+  mengerjakanCamera({id, idtugas, namapekerja, image, wktu}) async {
+    return FirebaseFirestore.instance
+        .collection('pekerjaan')
+        .doc(id)
+        .collection('tugas')
+        .doc(idtugas)
+        .update({
+      'status': true,
+      'namapekerja': namapekerja,
+      'image': image,
+      'waktuMengerjakan': wktu
+    });
+  }
+
   belumDikerjaan({
     id,
     idtugas,
@@ -173,7 +188,12 @@ class FirebaseFirestroreku {
         .doc(id)
         .collection('tugas')
         .doc(idtugas)
-        .update({'status': false, 'namapekerja': ''});
+        .update({
+      'status': false,
+      'namapekerja': '',
+      'image': '',
+      'waktuMengerjakan': null
+    });
   }
 
   hapusTugas({id, idtugas}) {

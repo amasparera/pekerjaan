@@ -132,4 +132,27 @@ class PekerjaanController extends GetxController {
     }
     Get.back();
   }
+
+  //ulangi
+  List<String> day = [
+    'Senin',
+    'Selasa',
+    'Rabu',
+    'Kamis',
+    'Jum\'at',
+    'Sabtu',
+    'Minggu'
+  ];
+
+  List<int> indexUlangi = [];
+
+  void ontap(int index) {
+    if (indexUlangi.contains(index)) {
+      indexUlangi.remove(index);
+      update();
+    } else {
+      indexUlangi.add(index);
+      update();
+    }
+  }
 }

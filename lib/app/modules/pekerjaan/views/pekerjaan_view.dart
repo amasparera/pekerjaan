@@ -1,14 +1,16 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:pekerjaan/app/data/heleper/pdf_qr.dart';
+import 'package:pekerjaan/app/data/firebase/cloud.dart';
 import 'package:pekerjaan/app/data/model/model_pekerjaan.dart';
+import 'package:pekerjaan/app/modules/pekerjaan/views/ulangi.dart';
+import 'package:pekerjaan/app/routes/app_pages.dart';
 
 import '../controllers/pekerjaan_controller.dart';
+import 'detail.dart';
 
 class PekerjaanView extends GetView<PekerjaanController> {
   const PekerjaanView({Key? key}) : super(key: key);
@@ -56,13 +58,13 @@ class PekerjaanView extends GetView<PekerjaanController> {
               padding: const EdgeInsets.only(bottom: 110),
               itemCount: pekerjaan.length,
               itemBuilder: (context, index) =>
-                  hariIni(context, pekerjaan, index),
+                  cardTile(context, pekerjaan, index),
             );
           }
         });
   }
 
-  Widget hariIni(
+  Widget cardTile(
       BuildContext context, List<PekerjaanModel> pekerjaan, int index) {
     return Column(
       children: [
@@ -73,22 +75,9 @@ class PekerjaanView extends GetView<PekerjaanController> {
                 builder: (context) => dialogEdit(context, pekerjaan[index]));
           },
           onTap: () async {
-            if (pekerjaan[index].barcode == true) {
-              await FlutterBarcodeScanner.scanBarcode(
-                      '#ff6666', 'Cancel', true, ScanMode.DEFAULT)
-                  .then((value) {
-                if (value != '-1' && value == pekerjaan[index].id) {
-                  controller.mengerjakan(value);
-                  Get.snackbar('berhasil', 'tugas dikerjaan',
-                      colorText: Colors.white);
-                } else if (value != '-1' && value != pekerjaan[index].id) {
-                  Get.snackbar('Gagal', 'barcode salah',
-                      colorText: Colors.white);
-                } else {
-                  Get.snackbar('Gagal', 'mohon mengulang kembali',
-                      colorText: Colors.white);
-                }
-              });
+            if (pekerjaan[index].barcode == true &&
+                pekerjaan[index].status == false) {
+              Get.toNamed(Routes.IMAGEUPLOAD, arguments: pekerjaan[index].id!);
             } else if (pekerjaan[index].status == false) {
               controller.mengerjakan(pekerjaan[index].id);
             }
@@ -116,18 +105,23 @@ class PekerjaanView extends GetView<PekerjaanController> {
           ),
           trailing: (pekerjaan[index].barcode == true &&
                   pekerjaan[index].namePekerja == '')
-              ? IconButton(
-                  onPressed: () {
-                    membuatqr(pekerjaan[index].id!, pekerjaan[index].name);
-                  },
-                  icon: const Icon(
-                    Icons.qr_code_scanner_outlined,
-                    color: Colors.white70,
-                  ),
+              ? const Icon(
+                  Icons.add_a_photo,
+                  color: Colors.white70,
                 )
-              : Text(pekerjaan[index].namePekerja!,
-                  style: const TextStyle(
-                      color: Colors.orange, fontWeight: FontWeight.bold)),
+              : GestureDetector(
+                  onTap: () {
+                    if (pekerjaan[index].barcode == true) {
+                      Get.to(Detail(
+                        title: pekerjaan[index].name!,
+                        model: pekerjaan[index],
+                      ));
+                    }
+                  },
+                  child: Text(pekerjaan[index].namePekerja!,
+                      style: const TextStyle(
+                          color: Colors.orange, fontWeight: FontWeight.bold)),
+                ),
         ),
         const Padding(
           padding: EdgeInsets.only(left: 14),
@@ -165,6 +159,9 @@ class PekerjaanView extends GetView<PekerjaanController> {
                       child: InkWell(
                         onTap: () {
                           controller.belumDikerjakan(model.id);
+                          if (model.barcode! && model.status!) {
+                            Storage().delete(model.image!);
+                          }
                           Get.back();
                         },
                         child: const Center(
@@ -187,7 +184,10 @@ class PekerjaanView extends GetView<PekerjaanController> {
                       color: Colors.red,
                       child: InkWell(
                         onTap: () {
-                          controller.rangeWaktu(context, model);
+                          // controller.rangeWaktu(context, model);
+                          controller.indexUlangi.clear();
+
+                          Get.to(const Ulangi());
                         },
                         child: const Center(
                           child: Text(
@@ -209,6 +209,9 @@ class PekerjaanView extends GetView<PekerjaanController> {
                       child: InkWell(
                         onTap: () {
                           controller.hapusTugas(model.id);
+                          if (model.barcode! && model.status!) {
+                            Storage().delete(model.image!);
+                          }
                           Get.back();
                         },
                         child: const Center(
@@ -347,7 +350,7 @@ class PekerjaanView extends GetView<PekerjaanController> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               children: [
-                const Text('Barcode :'),
+                const Text('Camera :'),
                 const Spacer(),
                 Obx(() => Text(
                       controller.barcode.value == false ? 'tidak' : 'perlu',

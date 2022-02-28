@@ -5,9 +5,10 @@ class PekerjaanModel {
   String? name;
   String? descripsi;
   String? namePekerja;
+  String? image;
   DateTime? hariIni;
   bool? barcode;
-  // DateTime? update;
+  DateTime? wktumengerjakkan;
   bool? status;
 
   List? day = [];
@@ -30,7 +31,10 @@ class PekerjaanModel {
     descripsi = json['descripsi'];
     hariIni = (json['hariini'] as Timestamp).toDate();
     barcode = json['barcode'];
-    // update = (json['update'] as Timestamp).toDate();
+    image = json['image'];
+    wktumengerjakkan = json['waktuMengerjakan'] != null
+        ? (json['waktuMengerjakan'] as Timestamp).toDate()
+        : null;
   }
 
   Map<String, dynamic> toJson() {
